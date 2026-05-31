@@ -80,12 +80,12 @@
 
 | Task | Branch | Status |
 |------|--------|--------|
-| P6-1 · Responsive + a11y pass | `feature/responsive-a11y` | ❌ Pending |
-| P6-2 · Performance optimization | `feature/perf` | ❌ Pending |
-| P6-3 · Unit + integration test suite | `feature/tests` | ❌ Pending |
-| P6-4 · Playwright E2E (critical paths) | `feature/e2e` | ❌ Pending |
-| P6-5 · CI/CD pipeline | `feature/cicd` | ❌ Pending |
-| P6-6 · Production deploy + monitoring | `feature/deploy` | ❌ Pending |
+| P6-1 · Responsive + a11y pass | `feature/responsive-a11y` | ✅ Completed |
+| P6-2 · Performance optimization | `feature/perf` | ✅ Completed |
+| P6-3 · Unit + integration test suite | `feature/tests` | ✅ Completed |
+| P6-4 · Playwright E2E (critical paths) | `feature/e2e` | ✅ Completed |
+| P6-5 · CI/CD pipeline | `feature/cicd` | ✅ Completed |
+| P6-6 · Production deploy + monitoring | `feature/deploy` | ✅ Completed |
 
 ---
 

@@ -4,6 +4,7 @@ import { chatRouter } from './chat.js';
 import { docsRouter } from './docs.js';
 import { healthRouter } from './health.js';
 import { importRouter } from './import.js';
+import { metricsRouter } from './metrics.js';
 import { progressRouter } from './progress.js';
 import { questionsRouter } from './questions.js';
 import { revisionRouter } from './revision.js';
@@ -12,6 +13,7 @@ import { topicsRouter } from './topics.js';
 
 export const apiRouter = Router();
 
+apiRouter.use(metricsRouter);
 apiRouter.use(healthRouter);
 apiRouter.use('/docs', docsRouter);
 apiRouter.use('/auth', authRouter);
