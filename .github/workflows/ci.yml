@@ -89,7 +89,7 @@ jobs:
         run: npm run db:generate -w @dsa-studio/api
 
       - name: Run migrations
-        run: npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
+        run: npm run db:migrate:deploy -w @dsa-studio/api
 
       - name: Seed test database
         run: npm run db:seed -w @dsa-studio/api
