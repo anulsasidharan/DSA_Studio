@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: DSA Studio API
-  description: REST API for the DSA Studio learning platform — Phase 1 Foundation + Phase 2 Learning Hub.
-  version: 0.2.0
+  description: REST API for the DSA Studio learning platform — Phase 1 Foundation + Phase 2 Learning Hub + Phase 3 Progress Tracking.
+  version: 0.3.0
   contact:
     name: DSA Studio Team
 
@@ -16,6 +16,7 @@ tags:
   - name: Topics
   - name: Questions
   - name: Practice
+  - name: Progress
 
 components:
   securitySchemes:
@@ -601,3 +602,126 @@ paths:
       responses:
         '200':
           description: Topic detail
+
+  /auth/profile:
+    put:
+      tags: [Auth]
+      summary: Update user profile and daily goal
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                learningLevel:
+                  type: string
+                  enum: [beginner, intermediate, advanced]
+                dailyTarget:
+                  type: integer
+                  minimum: 1
+                  maximum: 50
+                targetGoal:
+                  type: string
+      responses:
+        '200':
+          description: Updated user profile
+
+  /progress:
+    get:
+      tags: [Progress]
+      summary: Overall progress, streak summary, earned badges
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Progress overview
+
+  /progress/daily:
+    get:
+      tags: [Progress]
+      summary: Daily activity history
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated daily activity
+    post:
+      tags: [Progress]
+      summary: Log or update daily activity manually
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activityDate:
+                  type: string
+                  format: date
+                questionsAttempted:
+                  type: integer
+                questionsSolved:
+                  type: integer
+                timeSpentMinutes:
+                  type: integer
+                topicsCovered:
+                  type: array
+                  items:
+                    type: string
+                notes:
+                  type: string
+      responses:
+        '201':
+          description: Activity logged
+
+  /progress/streak:
+    get:
+      tags: [Progress]
+      summary: Streak information
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current and longest streak
+
+  /progress/analytics:
+    get:
+      tags: [Progress]
+      summary: Analytics data for charts and badges
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+      responses:
+        '200':
+          description: Heatmap, weekly bar, topic pie, badges

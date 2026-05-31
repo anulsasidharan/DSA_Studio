@@ -8,6 +8,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { requireAuth, type AuthenticatedRequest } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { loginSchema, registerSchema } from '../validators/auth.js';
+import { profileUpdateSchema } from '../validators/progress.js';
 
 export const authRouter = Router();
 
@@ -83,6 +84,26 @@ authRouter.get('/me', requireAuth, async (req: AuthenticatedRequest, res, next) 
     if (!user) {
       throw new AppError(404, 'NOT_FOUND', 'User not found');
     }
+
+    res.json(success({ user: serializeUser(user) }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+authRouter.put('/profile', requireAuth, validate(profileUpdateSchema), async (req: AuthenticatedRequest, res, next) => {
+  try {
+    const { fullName, learningLevel, dailyTarget, targetGoal } = req.body;
+
+    const user = await prisma.user.update({
+      where: { userId: req.userId! },
+      data: {
+        ...(fullName !== undefined ? { fullName } : {}),
+        ...(learningLevel !== undefined ? { learningLevel } : {}),
+        ...(dailyTarget !== undefined ? { dailyTarget } : {}),
+        ...(targetGoal !== undefined ? { targetGoal } : {}),
+      },
+    });
 
     res.json(success({ user: serializeUser(user) }));
   } catch (error) {

@@ -4,6 +4,7 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { LearnPage } from '@/pages/LearnPage';
 import { PracticeListPage } from '@/pages/PracticeListPage';
 import { PracticePage } from '@/pages/PracticePage';
+import { TrackPage } from '@/pages/TrackPage';
 import { TopicDetailPage } from '@/pages/TopicDetailPage';
 
 function AppLayout({ children }: { children: React.ReactNode }) {
@@ -25,7 +26,7 @@ function App() {
           <Route path="/learn/:topicSlug" element={<TopicDetailPage />} />
           <Route path="/practice" element={<PracticeListPage />} />
           <Route path="/practice/:questionSlug" element={<PracticePage />} />
-          <Route path="/track" element={<Navigate to="/" replace />} />
+          <Route path="/track" element={<TrackPage />} />
           <Route path="/assistant" element={<Navigate to="/" replace />} />
         </Routes>
       </AppLayout>

@@ -1,8 +1,9 @@
 import type {
-  ApiResponse,
+  AnalyticsResponse,
   HealthCheckResponse,
   PaginatedResponse,
-  SubmitResponse,
+  ProgressOverviewResponse,
+  StreakInfoResponse,
   User,
 } from '@dsa-studio/shared';
 import type { CodeLanguage } from '@dsa-studio/shared';
@@ -21,14 +22,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
 
-  const body = (await response.json()) as ApiResponse<T>;
+  const body = (await response.json()) as { success: boolean; data?: T; error?: { message: string } };
 
   if (!response.ok || body.success === false) {
-    const message = body.success === false ? body.error.message : `Request failed (${response.status})`;
+    const message = body.success === false ? body.error!.message : `Request failed (${response.status})`;
     throw new Error(message);
   }
 
-  return body.data;
+  return body.data as T;
 }
 
 export interface TopicDto {
@@ -120,6 +121,17 @@ export const apiClient = {
 
   getMe: () => request<{ user: User }>('/api/auth/me'),
 
+  updateProfile: (body: {
+    fullName?: string;
+    learningLevel?: string;
+    dailyTarget?: number;
+    targetGoal?: string;
+  }) =>
+    request<{ user: User }>('/api/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    }),
+
   getTopics: (params?: { category?: string; difficulty?: string; page?: number; limit?: number }) => {
     const q = new URLSearchParams();
     if (params?.category) q.set('category', params.category);
@@ -162,8 +174,37 @@ export const apiClient = {
     request<RunResultDto>('/api/run', { method: 'POST', body: JSON.stringify(body) }),
 
   submitCode: (body: { questionId: string; language: CodeLanguage; code: string }) =>
-    request<SubmitResponse & { results?: RunResultDto['results'] }>('/api/submit', {
+    request<{ status: string; testCasesPassed: number; totalTestCases: number; executionTimeMs: number; memoryUsedMb: number; results?: RunResultDto['results'] }>('/api/submit', {
       method: 'POST',
       body: JSON.stringify(body),
     }),
+
+  getProgress: () => request<ProgressOverviewResponse>('/api/progress'),
+
+  getStreak: () => request<StreakInfoResponse>('/api/progress/streak'),
+
+  getDailyActivity: (params?: { from?: string; to?: string; page?: number; limit?: number }) => {
+    const q = new URLSearchParams();
+    if (params?.from) q.set('from', params.from);
+    if (params?.to) q.set('to', params.to);
+    if (params?.page) q.set('page', String(params.page));
+    if (params?.limit) q.set('limit', String(params.limit ?? 60));
+    return request<PaginatedResponse<import('@dsa-studio/shared').DailyActivity>>(`/api/progress/daily?${q}`);
+  },
+
+  logDailyActivity: (body: {
+    activityDate?: string;
+    questionsAttempted?: number;
+    questionsSolved?: number;
+    timeSpentMinutes?: number;
+    topicsCovered?: string[];
+    notes?: string;
+  }) =>
+    request<{ activity: import('@dsa-studio/shared').DailyActivity }>('/api/progress/daily', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  getAnalytics: (days = 30) =>
+    request<AnalyticsResponse>(`/api/progress/analytics?days=${days}`),
 };
