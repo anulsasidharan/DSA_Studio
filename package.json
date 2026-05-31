@@ -1,0 +1,23 @@
+{
+  "name": "dsa-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DSA Studio — intelligent DSA learning platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:web": "npm run dev -w @dsa-studio/web",
+    "dev:api": "npm run dev -w @dsa-studio/api",
+    "build": "npm run build -w @dsa-studio/shared && npm run build --workspaces --if-present",
+    "build:web": "npm run build -w @dsa-studio/web",
+    "build:api": "npm run build -w @dsa-studio/api",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -12,8 +12,8 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 
 ### Weeks 1–2: Project setup & infrastructure
 
-- [ ] Initialize monorepo: `apps/web` (React + TS + Tailwind + shadcn), `apps/api` (Express + TS)
-- [ ] `packages/shared` — shared TypeScript types
+- [x] Initialize monorepo: `apps/web` (React + TS + Tailwind + shadcn), `apps/api` (Express + TS)
+- [x] `packages/shared` — shared TypeScript types
 - [ ] Docker Compose: PostgreSQL 15, Redis
 - [ ] Prisma (or TypeORM) — all tables from spec § Data Model
 - [ ] `.env.example` + gitignore secrets
