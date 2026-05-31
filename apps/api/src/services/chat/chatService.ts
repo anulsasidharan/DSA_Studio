@@ -1,4 +1,4 @@
-import type { ChatMessageType } from '@prisma/client';
+import type { ChatMessageType } from '../../types/db.js';
 import { completeLLM } from '../../lib/llm/index.js';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../middleware/errorHandler.js';
@@ -220,7 +220,8 @@ export async function getChatHistory(userId: string, page: number, limit: number
     prisma.chatSession.count({ where: { userId } }),
   ]);
 
-  const items = sessions.map((s) => {
+  type SessionRow = (typeof sessions)[number];
+  const items = sessions.map((s: SessionRow) => {
     const lastMessage = s.messages[0];
     return {
       sessionId: s.sessionId,
@@ -256,11 +257,13 @@ export async function getSessionMessages(userId: string, sessionId: string) {
     throw new AppError(404, 'NOT_FOUND', 'Chat session not found');
   }
 
+  type MessageRow = (typeof session.messages)[number];
+
   return {
     sessionId: session.sessionId,
     questionId: session.questionId,
     question: session.question,
-    messages: session.messages.map((m) => ({
+    messages: session.messages.map((m: MessageRow) => ({
       id: m.messageId,
       role: m.role,
       content: m.content,

@@ -135,18 +135,18 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 
 ### Weeks 21–22: UI/UX
 
-- [ ] Responsive layouts; mobile-friendly practice view
-- [ ] Animations/transitions (subtle)
-- [ ] Performance: lazy routes, Monaco on demand
-- [ ] User testing fixes
+- [x] Responsive layouts; mobile-friendly practice view
+- [x] Animations/transitions (subtle)
+- [x] Performance: lazy routes, Monaco on demand
+- [x] User testing fixes
 
 ### Weeks 23–24: Test & deploy
 
-- [ ] Jest unit + Supertest integration; Playwright E2E critical paths
-- [ ] GitHub Actions CI (lint, test, build)
-- [ ] Production Docker/K8s or PaaS deploy
-- [ ] Grafana/Prometheus or managed monitoring
-- [ ] Runbook: DB backup, sandbox scaling
+- [x] Jest unit + Supertest integration; Playwright E2E critical paths
+- [x] GitHub Actions CI (lint, test, build)
+- [x] Production Docker/K8s or PaaS deploy
+- [x] Grafana/Prometheus or managed monitoring
+- [x] Runbook: DB backup, sandbox scaling
 
 **Exit:** Staging deploy passes smoke test; SLO dashboards live.
 

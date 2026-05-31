@@ -14,7 +14,10 @@ export async function getOverallProgress(userId: string) {
     _count: { progressId: true },
   });
 
-  const solvedCount = solvedByDifficulty.reduce((sum, row) => sum + row._count.progressId, 0);
+  const solvedCount = solvedByDifficulty.reduce(
+    (sum: number, row: (typeof solvedByDifficulty)[number]) => sum + row._count.progressId,
+    0,
+  );
 
   const difficultyTotals = await prisma.question.groupBy({
     by: ['difficulty'],
@@ -37,7 +40,7 @@ export async function getOverallProgress(userId: string) {
       (solvedByDiffMap[row.question.difficulty] ?? 0) + 1;
   }
 
-  const byDifficulty = difficultyTotals.map((row) => ({
+  const byDifficulty = difficultyTotals.map((row: (typeof difficultyTotals)[number]) => ({
     difficulty: row.difficulty as Difficulty,
     solved: solvedByDiffMap[row.difficulty] ?? 0,
     total: row._count.questionId,
@@ -53,17 +56,20 @@ export async function getOverallProgress(userId: string) {
     _count: { progressId: true },
   });
 
-  const topicIds = [...new Set(topicProgress.map((t) => t.topicId))];
+  const topicIds = [...new Set(topicProgress.map((t: (typeof topicProgress)[number]) => t.topicId))];
   const topics = await prisma.topic.findMany({
     where: { topicId: { in: topicIds } },
     select: { topicId: true, slug: true, topicName: true, totalQuestions: true },
   });
-  const topicMap = new Map(topics.map((t) => [t.topicId, t]));
+  type TopicRow = (typeof topics)[number];
+  const topicMap = new Map<string, TopicRow>(topics.map((t: TopicRow) => [t.topicId, t]));
 
-  const topicsMastered = topics.filter((topic) => {
+  const topicsMastered = topics.filter((topic: TopicRow) => {
     const solved =
       topicProgress.find(
-        (p) => p.topicId === topic.topicId && SOLVED_STATUSES.includes(p.status as typeof SOLVED_STATUSES[number]),
+        (p: (typeof topicProgress)[number]) =>
+          p.topicId === topic.topicId &&
+          SOLVED_STATUSES.includes(p.status as (typeof SOLVED_STATUSES)[number]),
       )?._count.progressId ?? 0;
     return topic.totalQuestions > 0 && solved >= topic.totalQuestions;
   }).length;
@@ -83,7 +89,9 @@ export async function getOverallProgress(userId: string) {
     topicBreakdown: topicIds.map((topicId) => {
       const topic = topicMap.get(topicId);
       const byStatus: Record<string, number> = {};
-      for (const row of topicProgress.filter((p) => p.topicId === topicId)) {
+      for (const row of topicProgress.filter(
+        (p: (typeof topicProgress)[number]) => p.topicId === topicId,
+      )) {
         byStatus[row.status] = row._count.progressId;
       }
       const solved =
@@ -115,7 +123,10 @@ export async function getAnalyticsData(userId: string, days = 30) {
   });
 
   const activityMap = new Map(
-    activities.map((a) => [a.activityDate.toISOString().slice(0, 10), a]),
+    activities.map((a: (typeof activities)[number]) => [
+      a.activityDate.toISOString().slice(0, 10),
+      a,
+    ]),
   );
 
   const heatmap: Array<{
@@ -155,22 +166,32 @@ export async function getAnalyticsData(userId: string, days = 30) {
     _count: { progressId: true },
   });
 
-  const topicIds = topicSolved.map((t) => t.topicId);
+  const topicIds = topicSolved.map((t: (typeof topicSolved)[number]) => t.topicId);
   const topics = await prisma.topic.findMany({
     where: { topicId: { in: topicIds } },
     select: { topicId: true, topicName: true, category: true },
   });
-  const topicNameMap = new Map(topics.map((t) => [t.topicId, t.topicName]));
+  type TopicNameRow = (typeof topics)[number];
+  const topicNameMap = new Map<string, string>(
+    topics.map((t: TopicNameRow) => [t.topicId, t.topicName]),
+  );
 
   const topicPie = topicSolved
-    .map((row) => ({
+    .map((row: (typeof topicSolved)[number]) => ({
       name: topicNameMap.get(row.topicId) ?? 'Unknown',
       value: row._count.progressId,
     }))
-    .sort((a, b) => b.value - a.value);
+    .sort(
+      (a: { value: number }, b: { value: number }) => b.value - a.value,
+    );
 
-  const totalSolvedInPeriod = activities.reduce((sum, a) => sum + a.questionsSolved, 0);
-  const activeDays = activities.filter((a) => a.questionsSolved > 0).length;
+  const totalSolvedInPeriod = activities.reduce(
+    (sum: number, a: (typeof activities)[number]) => sum + a.questionsSolved,
+    0,
+  );
+  const activeDays = activities.filter(
+    (a: (typeof activities)[number]) => a.questionsSolved > 0,
+  ).length;
   const peakDay = [...activities].sort((a, b) => b.questionsSolved - a.questionsSolved)[0];
 
   const attemptStats = await prisma.userAttempt.groupBy({
@@ -182,9 +203,13 @@ export async function getAnalyticsData(userId: string, days = 30) {
     _count: { attemptId: true },
   });
 
-  const totalAttempts = attemptStats.reduce((sum, row) => sum + row._count.attemptId, 0);
+  const totalAttempts = attemptStats.reduce(
+    (sum: number, row: (typeof attemptStats)[number]) => sum + row._count.attemptId,
+    0,
+  );
   const accepted =
-    attemptStats.find((row) => row.status === 'accepted')?._count.attemptId ?? 0;
+    attemptStats.find((row: (typeof attemptStats)[number]) => row.status === 'accepted')?._count
+      .attemptId ?? 0;
 
   return {
     periodDays: days,

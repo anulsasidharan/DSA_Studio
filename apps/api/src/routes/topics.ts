@@ -53,13 +53,14 @@ topicsRouter.get('/progress', requireAuth, async (req: AuthenticatedRequest, res
       _count: { progressId: true },
     });
 
-    const topicIds = [...new Set(progress.map((p) => p.topicId))];
+    const topicIds = [...new Set(progress.map((p: (typeof progress)[number]) => p.topicId))];
     const topics = await prisma.topic.findMany({
       where: { topicId: { in: topicIds } },
       select: { topicId: true, slug: true, topicName: true, totalQuestions: true },
     });
 
-    const topicMap = new Map(topics.map((t) => [t.topicId, t]));
+    type TopicRow = (typeof topics)[number];
+    const topicMap = new Map<string, TopicRow>(topics.map((t: TopicRow) => [t.topicId, t]));
 
     const byTopic = new Map<
       string,
@@ -153,13 +154,15 @@ topicsRouter.get(
           where: { userId: req.userId, topicId: id },
           select: { questionId: true, status: true },
         });
-        progressMap = new Map(progress.map((p) => [p.questionId, p.status]));
+        type ProgressRow = (typeof progress)[number];
+        progressMap = new Map(progress.map((p: ProgressRow) => [p.questionId, p.status]));
       }
 
+      type QuestionRow = (typeof questions)[number];
       res.json(
         success({
           topic: serializeTopic(topic),
-          items: questions.map((q) => ({
+          items: questions.map((q: QuestionRow) => ({
             ...serializeQuestionSummary(q),
             progressStatus: progressMap.get(q.questionId) ?? 'not_attempted',
           })),

@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Phase 5 **complete** — LLM client, chat API/UI, code review, import classification, learning path AI
+**Repository state:** Phase 6 **complete** — responsive/a11y polish, lazy loading, Jest + Playwright tests, GitHub Actions CI, production Docker stack, Prometheus metrics, runbooks
 
 ---
 
@@ -37,7 +37,8 @@
 | Code execution | Docker containers | Sandboxed per-language runs |
 | Real-time (optional) | Socket.io | Live tracker / notifications |
 | File storage | AWS S3 or GCS | Avatars, import assets |
-| CI/CD | GitHub Actions | Spec default |
+| CI/CD | GitHub Actions | Spec default; lint, typecheck, Jest, Playwright, Docker build on main |
+| Deploy target | Docker Compose (prod) | `infra/docker/docker-compose.prod.yml`; Railway/Render optional |
 | Auth | JWT (register/login/logout) | Endpoints defined in spec § API |
 
 ---
@@ -84,9 +85,9 @@
 | 3 | Progress Tracking | **Complete** | Progress/daily APIs, streaks, analytics, `/track` dashboard, calendar, goals, badges |
 | 4 | Advanced Features | **Complete** | Spaced repetition (`/revision`), import manual/CSV/JSON/URL + history (`/import`) |
 | 5 | AI Integration | **Complete** | LLM client (OpenAI/Anthropic/mock), `/api/chat/*`, Assistant UI, code review, import classify, learning path |
-| 6 | Polish & Launch | Not started | Tests, CI/CD, production deploy |
+| 6 | Polish & Launch | **Complete** | Responsive/a11y, perf (lazy routes/Monaco), Jest + Supertest, Playwright E2E, GitHub Actions CI, Docker prod compose, `/api/metrics`, runbooks |
 
-**Active focus:** Phase 6 — Polish & Launch (see `TASKS.md` P6-*)
+**Active focus:** All 6 phases complete — ready for staging/production deploy
 
 ### Product policies (Phase 2)
 
@@ -146,6 +147,7 @@
 
 | Date | Change |
 |------|--------|
+| 2026-05-31 | Phase 6 complete: responsive/a11y pass, lazy routes + Monaco, Jest/Supertest tests, Playwright E2E, GitHub Actions CI, production Docker images, Prometheus `/api/metrics`, ops runbooks |
 | 2026-05-31 | Phase 5 complete: LLM client, chat query/hint/review/history APIs, Assistant page, practice chat panel, import AI classify, learning path recommendations |
 | 2026-05-31 | Phase 2 complete: Learn/Practice UI, Monaco, POST /api/run & /api/submit, hints, solutions (gated), Docker sandbox images |
 | 2026-05-31 | Phase 1 complete: Prisma schema (11 tables), JWT auth, topics/questions REST, seed (8 topics, 40 questions), OpenAPI at `/api/docs` |

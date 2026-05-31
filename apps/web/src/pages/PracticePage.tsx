@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Lightbulb, Play, Send } from 'lucide-react';
+import { ArrowLeft, Bookmark, ChevronDown, ChevronUp, Lightbulb, Play, Send } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import type { CodeLanguage } from '@dsa-studio/shared';
 import { ChatPanel } from '@/components/chat/ChatPanel';
@@ -37,6 +37,7 @@ export function PracticePage() {
   const [hintTier, setHintTier] = useState(0);
   const [solutions, setSolutions] = useState<SolutionDto[]>([]);
   const [solutionsLoading, setSolutionsLoading] = useState(false);
+  const [testsExpanded, setTestsExpanded] = useState(true);
 
   const loadStarter = useCallback(
     async (qId: string, lang: CodeLanguage) => {
@@ -195,7 +196,7 @@ export function PracticePage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="space-y-4">
+        <div className="order-2 space-y-4 lg:order-1">
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
               <TabsTrigger value="description">Description</TabsTrigger>
@@ -313,14 +314,38 @@ export function PracticePage() {
           )}
         </div>
 
-        <div className="space-y-4">
-          <CodeEditor language={language} value={code} onChange={setCode} height="480px" />
+        <div className="order-1 space-y-4 lg:order-2">
+          <CodeEditor language={language} value={code} onChange={setCode} height="min(480px, 50vh)" />
 
-          <Card aria-live="polite">
-            <CardHeader className="py-3">
+          <Card aria-live="polite" aria-atomic="true">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3">
               <CardTitle className="text-sm font-medium">Test results (sample)</CardTitle>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="lg:hidden"
+                aria-expanded={testsExpanded}
+                aria-controls="test-results-panel"
+                onClick={() => setTestsExpanded((expanded) => !expanded)}
+              >
+                {testsExpanded ? (
+                  <>
+                    <ChevronUp className="mr-1 h-4 w-4" aria-hidden="true" />
+                    Hide
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="mr-1 h-4 w-4" aria-hidden="true" />
+                    Show
+                  </>
+                )}
+              </Button>
             </CardHeader>
-            <CardContent className="space-y-2 pb-4 text-sm">
+            <CardContent
+              id="test-results-panel"
+              className={`space-y-2 pb-4 text-sm ${testsExpanded ? 'block' : 'hidden lg:block'}`}
+            >
               {!runResult && (
                 <p className="text-muted-foreground">Run your code against sample test cases.</p>
               )}

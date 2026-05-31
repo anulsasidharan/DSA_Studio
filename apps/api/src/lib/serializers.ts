@@ -4,7 +4,11 @@ import type {
   QuestionSource,
   User,
 } from '@dsa-studio/shared';
-import type { Question, Topic, TestCase, User as DbUser } from '@prisma/client';
+import type { DbQuestion, DbTestCase, DbTopic, DbUser } from '../types/db.js';
+
+type Topic = DbTopic;
+type Question = DbQuestion;
+type TestCase = DbTestCase;
 
 export function serializeUser(user: DbUser): User {
   return {
