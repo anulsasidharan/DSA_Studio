@@ -13,7 +13,7 @@
 | Task | Branch | Status |
 |------|--------|--------|
 | P1-1 · Monorepo scaffold (`apps/web`, `apps/api`, `packages/shared`) | `feature/monorepo-scaffold` | ✅ Completed |
-| P1-2 · Docker Compose (PostgreSQL, Redis) | `feature/docker-compose` | ❌ Pending |
+| P1-2 · Docker Compose (PostgreSQL, Redis) | `feature/docker-compose` | ✅ Completed |
 | P1-3 · Prisma schema (all tables from spec) | `feature/prisma-schema` | ❌ Pending |
 | P1-4 · Auth (JWT register/login/me) | `feature/auth-jwt` | ❌ Pending |
 | P1-5 · Topics & questions REST + validation | `feature/core-apis` | ❌ Pending |

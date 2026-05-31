@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Phase 1 in progress — **P1-1 monorepo scaffold complete** (web, api, shared)
+**Repository state:** Phase 1 in progress — **P1-1 monorepo scaffold complete**, **P1-2 Docker Compose (PostgreSQL, Redis) complete**
 
 ---
 
@@ -79,7 +79,7 @@
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** | P1-1 monorepo done; Docker, Prisma, auth next |
+| 1 | Foundation | **In progress** | P1-1 monorepo done; P1-2 Docker done; Prisma, auth next |
 | 2 | Learning Hub | Not started | Topics, questions, Monaco practice |
 | 3 | Progress Tracking | Not started | Analytics, streaks, goals |
 | 4 | Advanced Features | Not started | Revision queue, custom import |
@@ -115,5 +115,6 @@
 
 | Date | Change |
 |------|--------|
+| 2026-05-31 | P1-2 Docker Compose: PostgreSQL 15 + Redis at `infra/docker/`; npm `docker:*` scripts |
 | 2026-05-31 | P1-1 monorepo scaffold: npm workspaces, Vite web, Express API, shared types |
 | 2026-05-31 | Initial MEMORY from `rules/CLAUDE.md`; all phases pending |

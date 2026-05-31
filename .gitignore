@@ -35,8 +35,9 @@ apps/web/dist/
 apps/api/prisma/*.db
 apps/api/prisma/*.db-journal
 
-# Docker local overrides
+# Docker local overrides & compose env
 docker-compose.override.yml
+infra/docker/.env
 
 # Misc
 *.local
