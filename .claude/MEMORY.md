@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Specification complete; **implementation not started** (Phase 1 pending)
+**Repository state:** Phase 1 in progress — **P1-1 monorepo scaffold complete** (web, api, shared)
 
 ---
 
@@ -26,7 +26,7 @@
 |----------|--------|-------------------|
 | Frontend framework | React 18+ with TypeScript | Spec default; rich ecosystem for Monaco, charts |
 | UI | Tailwind CSS + shadcn/ui | Consistent accessible components |
-| State | Zustand or Redux Toolkit | Spec allows either; pick one at scaffold and record here |
+| State | **Zustand** | Locked at P1-1 scaffold (`apps/web/src/store/`) |
 | Code editor | Monaco Editor | VS Code–parity in browser |
 | Charts | Recharts or Chart.js | Analytics dashboard |
 | Backend runtime | Node.js 20+ with Express | Spec default |
@@ -79,7 +79,7 @@
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **Not started** | Monorepo, auth, DB schema, core APIs |
+| 1 | Foundation | **In progress** | P1-1 monorepo done; Docker, Prisma, auth next |
 | 2 | Learning Hub | Not started | Topics, questions, Monaco practice |
 | 3 | Progress Tracking | Not started | Analytics, streaks, goals |
 | 4 | Advanced Features | Not started | Revision queue, custom import |
@@ -94,10 +94,10 @@
 
 | ID | Item | Status |
 |----|------|--------|
-| OQ-1 | Monorepo vs separate `frontend/` + `backend/` repos | **Decide at P1-1** — recommend single repo with `apps/web` + `apps/api` |
-| OQ-2 | Prisma vs TypeORM | **Decide at P1-2** — default Prisma in MEMORY until changed |
-| OQ-3 | Zustand vs Redux Toolkit | **Decide at P1-3** — default Zustand for simpler MVP |
-| OQ-4 | Next.js vs Vite SPA | Spec says React; Next.js acceptable for SSR — confirm at scaffold |
+| OQ-1 | Monorepo vs separate `frontend/` + `backend/` repos | **Resolved P1-1** — npm workspaces: `apps/web` + `apps/api` + `packages/shared` |
+| OQ-2 | Prisma vs TypeORM | **Decide at P1-3** — default Prisma in MEMORY until changed |
+| OQ-3 | Zustand vs Redux Toolkit | **Resolved P1-1** — Zustand for MVP |
+| OQ-4 | Next.js vs Vite SPA | **Resolved P1-1** — Vite SPA + React 19 |
 
 ---
 
@@ -115,4 +115,5 @@
 
 | Date | Change |
 |------|--------|
+| 2026-05-31 | P1-1 monorepo scaffold: npm workspaces, Vite web, Express API, shared types |
 | 2026-05-31 | Initial MEMORY from `rules/CLAUDE.md`; all phases pending |
