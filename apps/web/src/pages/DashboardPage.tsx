@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, Target, Trophy } from 'lucide-react';
+import { Flame, Map, Target, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useHealthCheck } from '@/hooks/useHealthCheck';
 import { apiClient } from '@/lib/api-client';
 import { useAuthStore } from '@/store/authStore';
-import type { ProgressOverviewResponse } from '@dsa-studio/shared';
+import type { LearningPathResponse, ProgressOverviewResponse } from '@dsa-studio/shared';
 
 export function DashboardPage() {
   const user = useAuthStore((s) => s.user);
@@ -14,10 +14,13 @@ export function DashboardPage() {
   const { data: health, loading, error } = useHealthCheck();
   const [progress, setProgress] = useState<ProgressOverviewResponse | null>(null);
   const [progressLoading, setProgressLoading] = useState(!!token);
+  const [learningPath, setLearningPath] = useState<LearningPathResponse | null>(null);
+  const [pathLoading, setPathLoading] = useState(!!token);
 
   useEffect(() => {
     if (!token) {
       setProgressLoading(false);
+      setPathLoading(false);
       return;
     }
     apiClient
@@ -25,6 +28,12 @@ export function DashboardPage() {
       .then(setProgress)
       .catch(() => setProgress(null))
       .finally(() => setProgressLoading(false));
+
+    apiClient
+      .getLearningPath()
+      .then(setLearningPath)
+      .catch(() => setLearningPath(null))
+      .finally(() => setPathLoading(false));
   }, [token]);
 
   const streak = progress?.streak;
@@ -84,6 +93,57 @@ export function DashboardPage() {
           </>
         )}
       </section>
+
+      {token && (pathLoading || learningPath) && (
+        <section className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-2">
+            <Map className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold">AI learning path</h2>
+          </div>
+          {pathLoading ? (
+            <Skeleton className="h-32" />
+          ) : learningPath ? (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">{learningPath.summary}</p>
+              {learningPath.weakTopics.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Weak areas: {learningPath.weakTopics.join(', ')}
+                </p>
+              )}
+              <ol className="space-y-3">
+                {learningPath.steps.map((step) => (
+                  <li key={step.order} className="flex items-start gap-3 rounded-md border p-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                      {step.order}
+                    </span>
+                    <div className="flex-1 space-y-1">
+                      <p className="font-medium">{step.topicName}</p>
+                      <p className="text-sm text-muted-foreground">{step.reason}</p>
+                      {step.completionPercentage != null && (
+                        <p className="text-xs text-muted-foreground">
+                          {step.completionPercentage}% complete
+                        </p>
+                      )}
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <Button variant="link" className="h-auto p-0 text-sm" asChild>
+                          <Link to={`/learn/${step.topicSlug}`}>Study topic →</Link>
+                        </Button>
+                        {step.suggestedQuestionSlug && (
+                          <Button variant="link" className="h-auto p-0 text-sm" asChild>
+                            <Link to={`/practice/${step.suggestedQuestionSlug}`}>
+                              Practice →
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
+        </section>
+      )}
 
       {token && overall && overall.topicBreakdown.length > 0 && (
         <section className="rounded-lg border bg-card p-6 shadow-sm">
@@ -163,6 +223,9 @@ export function DashboardPage() {
             </Button>
             <Button variant="outline" asChild>
               <Link to="/import">Import questions</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/assistant">AI Assistant</Link>
             </Button>
           </>
         )}

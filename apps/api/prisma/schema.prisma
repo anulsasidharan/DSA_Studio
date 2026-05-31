@@ -50,6 +50,18 @@ enum ImportMethod {
   url
 }
 
+enum ChatMessageRole {
+  user
+  assistant
+  system
+}
+
+enum ChatMessageType {
+  query
+  hint
+  review
+}
+
 model User {
   userId               String        @id @default(uuid()) @map("user_id")
   username             String        @unique @db.VarChar(50)
@@ -74,6 +86,8 @@ model User {
   customQuestions  CustomQuestion[]
   createdQuestions Question[]       @relation("QuestionCreator")
   createdSolutions Solution[]       @relation("SolutionCreator")
+  chatSessions     ChatSession[]
+  hintTiers        UserHintTier[]
 
   @@map("users")
 }
@@ -134,6 +148,8 @@ model Question {
   revisionQueue   RevisionQueue[]
   notes           UserNote[]
   customQuestions CustomQuestion[]
+  chatSessions    ChatSession[]
+  hintTiers       UserHintTier[]
 
   @@index([topicId])
   @@index([difficulty])
@@ -299,4 +315,49 @@ model CustomQuestion {
   question Question @relation(fields: [questionId], references: [questionId], onDelete: Cascade)
 
   @@map("custom_questions")
+}
+
+model ChatSession {
+  sessionId  String   @id @default(uuid()) @map("session_id")
+  userId     String   @map("user_id")
+  questionId String?  @map("question_id")
+  title      String?  @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user     User          @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  question Question?     @relation(fields: [questionId], references: [questionId], onDelete: SetNull)
+  messages ChatMessage[]
+
+  @@index([userId, updatedAt(sort: Desc)])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  messageId   String          @id @default(uuid()) @map("message_id")
+  sessionId   String          @map("session_id")
+  role        ChatMessageRole
+  content     String
+  messageType ChatMessageType @default(query) @map("message_type")
+  tokensUsed  Int?            @map("tokens_used")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  session ChatSession @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("chat_messages")
+}
+
+model UserHintTier {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  questionId String   @map("question_id")
+  hintTier   Int      @default(0) @map("hint_tier")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [questionId], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@map("user_hint_tiers")
 }

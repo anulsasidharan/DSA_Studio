@@ -112,18 +112,18 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 
 ### Weeks 17–18: Chatbot
 
-- [ ] Integrate OpenAI or Claude API
-- [ ] `POST /api/chat/query`, hint, review endpoints
-- [ ] Chat UI panel with history
-- [ ] Context: current question + last attempt (no PII in logs)
+- [x] Integrate OpenAI or Claude API
+- [x] `POST /api/chat/query`, hint, review endpoints
+- [x] Chat UI panel with history
+- [x] Context: current question + last attempt (no PII in logs)
 
 **Exit:** User asks for concept help and receives structured explanation.
 
 ### Weeks 19–20: AI enhancements
 
-- [ ] Auto-classify imported question difficulty/tags
-- [ ] Learning path suggestions (rule-based + AI)
-- [ ] Adaptive hint depth based on attempt count
+- [x] Auto-classify imported question difficulty/tags
+- [x] Learning path suggestions (rule-based + AI)
+- [x] Adaptive hint depth based on attempt count
 
 **Exit:** JSON import suggests tags; user confirms before save.
 

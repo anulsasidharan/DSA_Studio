@@ -831,3 +831,90 @@ paths:
       responses:
         '200':
           description: Paginated custom question imports
+
+  /import/classify:
+    post:
+      tags: [Import]
+      summary: AI classify raw problem text
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rawText]
+              properties:
+                rawText:
+                  type: string
+      responses:
+        '200':
+          description: Suggested title, difficulty, topic, tags for user review
+
+  /chat/query:
+    post:
+      tags: [Chat]
+      summary: General DSA chat query
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Assistant reply with session id
+
+  /chat/hint:
+    post:
+      tags: [Chat]
+      summary: Progressive AI hint for current problem
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Tiered hint without full solution
+
+  /chat/review:
+    post:
+      tags: [Chat]
+      summary: AI code review
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Correctness, complexity, and optimization feedback
+
+  /chat/history:
+    get:
+      tags: [Chat]
+      summary: Paginated chat session list
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Chat sessions with last message preview
+
+  /chat/history/{sessionId}:
+    get:
+      tags: [Chat]
+      summary: Messages for a chat session
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Full session message history
+
+  /chat/learning-path:
+    get:
+      tags: [Chat]
+      summary: Personalized learning path recommendations
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Rule-based and AI-suggested topic sequence
