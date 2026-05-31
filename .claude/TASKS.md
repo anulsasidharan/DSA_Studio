@@ -26,14 +26,14 @@
 
 | Task | Branch | Status |
 |------|--------|--------|
-| P2-1 · Topic browser UI | `feature/topic-browser` | ❌ Pending |
-| P2-2 · Topic detail + theory section | `feature/topic-detail` | ❌ Pending |
-| P2-3 · Question practice page layout | `feature/question-page` | ❌ Pending |
-| P2-4 · Monaco editor integration | `feature/monaco-editor` | ❌ Pending |
-| P2-5 · Code execution sandbox (Docker) | `feature/code-sandbox` | ❌ Pending |
-| P2-6 · Submit API + attempt logging | `feature/submit-flow` | ❌ Pending |
-| P2-7 · Hints API + UI | `feature/hints` | ❌ Pending |
-| P2-8 · Solutions viewer | `feature/solutions-view` | ❌ Pending |
+| P2-1 · Topic browser UI | `feature/topic-browser` | ✅ Completed |
+| P2-2 · Topic detail + theory section | `feature/topic-detail` | ✅ Completed |
+| P2-3 · Question practice page layout | `feature/question-page` | ✅ Completed |
+| P2-4 · Monaco editor integration | `feature/monaco-editor` | ✅ Completed |
+| P2-5 · Code execution sandbox (Docker) | `feature/code-sandbox` | ✅ Completed |
+| P2-6 · Submit API + attempt logging | `feature/submit-flow` | ✅ Completed |
+| P2-7 · Hints API + UI | `feature/hints` | ✅ Completed |
+| P2-8 · Solutions viewer | `feature/solutions-view` | ✅ Completed |
 
 ---
 

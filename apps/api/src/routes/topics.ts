@@ -6,6 +6,11 @@ import { AppError } from '../middleware/errorHandler.js';
 import { optionalAuth, requireAuth, type AuthenticatedRequest } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { listTopicsSchema, topicIdParamSchema, type ListTopicsQuery } from '../validators/topics.js';
+import { z } from 'zod';
+
+const topicSlugParamSchema = z.object({
+  slug: z.string().min(1),
+});
 
 export const topicsRouter = Router();
 
@@ -84,6 +89,24 @@ topicsRouter.get('/progress', requireAuth, async (req: AuthenticatedRequest, res
   }
 });
 
+topicsRouter.get('/slug/:slug', validate(topicSlugParamSchema, 'params'), async (req, res, next) => {
+  try {
+    const { slug } = req.params;
+
+    const topic = await prisma.topic.findFirst({
+      where: { slug, isActive: true },
+    });
+
+    if (!topic) {
+      throw new AppError(404, 'NOT_FOUND', 'Topic not found');
+    }
+
+    res.json(success({ topic: serializeTopic(topic) }));
+  } catch (error) {
+    next(error);
+  }
+});
+
 topicsRouter.get('/:id', validate(topicIdParamSchema, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -124,10 +147,22 @@ topicsRouter.get(
         orderBy: [{ difficulty: 'asc' }, { title: 'asc' }],
       });
 
+      let progressMap = new Map<string, string>();
+      if (req.userId) {
+        const progress = await prisma.userProgress.findMany({
+          where: { userId: req.userId, topicId: id },
+          select: { questionId: true, status: true },
+        });
+        progressMap = new Map(progress.map((p) => [p.questionId, p.status]));
+      }
+
       res.json(
         success({
           topic: serializeTopic(topic),
-          items: questions.map(serializeQuestionSummary),
+          items: questions.map((q) => ({
+            ...serializeQuestionSummary(q),
+            progressStatus: progressMap.get(q.questionId) ?? 'not_attempted',
+          })),
         }),
       );
     } catch (error) {
