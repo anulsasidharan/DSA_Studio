@@ -3,9 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TopicTheoryPanel } from '@/components/theory/TopicTheoryPanel';
 import { apiClient, type QuestionSummaryDto, type TopicDto } from '@/lib/api-client';
 import { DIFFICULTY_LABELS, difficultyVariant, progressIcon } from '@/lib/difficulty';
 import type { Difficulty } from '@dsa-studio/shared';
@@ -94,29 +95,7 @@ export function TopicDetailPage() {
         </TabsList>
 
         <TabsContent value="theory">
-          <Card>
-            <CardHeader>
-              <CardTitle>Concept overview</CardTitle>
-            </CardHeader>
-            <CardContent className="prose prose-sm max-w-none space-y-4 dark:prose-invert">
-              <p>{topic.theory?.overview ?? topic.description}</p>
-              {topic.theory?.whenToUse && (
-                <div>
-                  <h3 className="font-semibold">When to use</h3>
-                  <ul className="list-disc pl-5">
-                    {topic.theory.whenToUse.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {topic.theory?.complexityNotes && (
-                <p className="text-muted-foreground">
-                  <strong>Complexity focus:</strong> {topic.theory.complexityNotes}
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          <TopicTheoryPanel topic={topic} />
         </TabsContent>
 
         <TabsContent value="practice">

@@ -5,6 +5,7 @@ import type {
   User,
 } from '@dsa-studio/shared';
 import type { Question, Topic, TestCase, User as DbUser } from '@prisma/client';
+import { getDefaultTheory, getTopicTheory } from './topic-theory.js';
 
 export function serializeUser(user: DbUser): User {
   return {
@@ -28,6 +29,10 @@ export function serializeTopic(topic: Topic) {
     ? (topic.prerequisites as string[])
     : [];
 
+  const theoryContent =
+    getTopicTheory(topic.slug) ??
+    getDefaultTheory(topic.description, topic.category, topic.difficultyLevel);
+
   return {
     id: topic.topicId,
     slug: topic.slug,
@@ -41,44 +46,15 @@ export function serializeTopic(topic: Topic) {
     isActive: topic.isActive,
     totalQuestions: topic.totalQuestions,
     theory: {
-      overview: topic.description ?? '',
-      whenToUse: getTheoryBullets(topic.category),
-      complexityNotes: getComplexityNotes(topic.difficultyLevel as Difficulty),
+      overview: theoryContent.overview,
+      keyConcepts: theoryContent.keyConcepts,
+      whenToUse: theoryContent.whenToUse,
+      commonPatterns: theoryContent.commonPatterns,
+      complexityNotes: theoryContent.complexityNotes,
+      diagramId: theoryContent.diagramId,
+      diagramCaption: theoryContent.diagramCaption,
     },
   };
-}
-
-function getTheoryBullets(category: string | null): string[] {
-  const map: Record<string, string[]> = {
-    Arrays: [
-      'Use two pointers for sorted arrays and palindrome checks',
-      'Sliding window for contiguous subarray problems',
-      'Prefix sums for range queries',
-    ],
-    'Linked Lists': [
-      'Fast/slow pointers for cycle detection',
-      'Dummy head simplifies insert/delete edge cases',
-    ],
-    Trees: [
-      'DFS for paths and depth; BFS for level-order',
-      'BST in-order traversal yields sorted order',
-    ],
-    Graphs: ['BFS for shortest unweighted paths', 'DFS for connectivity and cycles'],
-    'Dynamic Programming': [
-      'Define state and recurrence before coding',
-      'Tabulation vs memoization based on space needs',
-    ],
-  };
-  return map[category ?? ''] ?? ['Practice pattern recognition', 'Analyze constraints before choosing approach'];
-}
-
-function getComplexityNotes(difficulty: Difficulty): string {
-  const notes: Record<Difficulty, string> = {
-    basic: 'Focus on O(n) or O(n log n) solutions with clear invariants.',
-    intermediate: 'Expect O(n) or O(n log n); watch for hidden quadratic loops.',
-    advanced: 'Optimize time and space; prove correctness of greedy/DP choices.',
-  };
-  return notes[difficulty];
 }
 
 export function serializeSolution(solution: {

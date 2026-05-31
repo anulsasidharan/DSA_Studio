@@ -46,9 +46,13 @@ export interface TopicDto {
   icon: string | null;
   totalQuestions: number;
   theory?: {
-    overview: string;
+    overview: string[];
+    keyConcepts: string[];
     whenToUse: string[];
+    commonPatterns: string[];
     complexityNotes: string;
+    diagramId: string;
+    diagramCaption: string;
   };
 }
 
