@@ -42,7 +42,8 @@ export async function classifyImportContent(rawText: string): Promise<ClassifyIm
     orderBy: { orderIndex: 'asc' },
   });
 
-  const topicList = topics.map((t) => `${t.slug} (${t.topicName})`).join(', ');
+  type TopicOption = (typeof topics)[number];
+  const topicList = topics.map((t: TopicOption) => `${t.slug} (${t.topicName})`).join(', ');
 
   const result = await completeLLM({
     messages: [
@@ -92,7 +93,7 @@ Available topic slugs: ${topicList || VALID_TOPIC_SLUGS.join(', ')}`,
     difficulty: DIFFICULTIES.includes(difficulty as (typeof DIFFICULTIES)[number])
       ? (difficulty as (typeof DIFFICULTIES)[number])
       : 'intermediate',
-    topicSlug: topics.some((t) => t.slug === topicSlug) ? topicSlug : 'arrays-strings',
+    topicSlug: topics.some((t: TopicOption) => t.slug === topicSlug) ? topicSlug : 'arrays-strings',
     tags: Array.isArray(parsed.tags) ? parsed.tags.map(String).slice(0, 10) : [],
     constraints: parsed.constraints ? String(parsed.constraints) : null,
     inputFormat: parsed.inputFormat ? String(parsed.inputFormat) : null,

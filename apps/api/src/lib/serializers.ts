@@ -4,12 +4,11 @@ import type {
   QuestionSource,
   User,
 } from '@dsa-studio/shared';
-import type { Prisma } from '@prisma/client';
+import type { DbQuestion, DbTestCase, DbTopic, DbUser } from '../types/db.js';
 
-type DbUser = Prisma.UserGetPayload<Record<string, never>>;
-type Topic = Prisma.TopicGetPayload<Record<string, never>>;
-type Question = Prisma.QuestionGetPayload<Record<string, never>>;
-type TestCase = Prisma.TestCaseGetPayload<Record<string, never>>;
+type Topic = DbTopic;
+type Question = DbQuestion;
+type TestCase = DbTestCase;
 
 export function serializeUser(user: DbUser): User {
   return {

@@ -1,5 +1,5 @@
 import type { Difficulty, ImportMethod, QuestionSource } from '@dsa-studio/shared';
-import type { Prisma } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 
 export interface TestCaseInput {
@@ -82,7 +82,7 @@ export async function createImportedQuestion(
   const slug = await uniqueQuestionSlug(payload.title);
   const source = payload.source ?? (importMethod === 'url' ? 'leetcode' : 'custom');
 
-  const question = await prisma.$transaction(async (tx) => {
+  const question = await prisma.$transaction(async (tx: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>) => {
     const created = await tx.question.create({
       data: {
         topicId,
@@ -139,7 +139,8 @@ export async function createImportedQuestion(
         sourceName: payload.sourceName ?? null,
         sourceUrl: payload.sourceUrl ?? null,
         importMethod,
-        originalContent: (originalContent ?? undefined) as Prisma.InputJsonValue | undefined,
+        originalContent:
+          originalContent != null ? JSON.parse(JSON.stringify(originalContent)) : undefined,
       },
     });
 
@@ -429,8 +430,10 @@ export async function getImportHistory(userId: string, page = 1, limit = 20) {
     }),
   ]);
 
+  type ImportHistoryItem = (typeof items)[number];
+
   return {
-    items: items.map((item) => ({
+    items: items.map((item: ImportHistoryItem) => ({
       id: item.customQuestionId,
       questionId: item.questionId,
       importMethod: item.importMethod,

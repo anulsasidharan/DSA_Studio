@@ -1,7 +1,5 @@
 import type { AttemptStatus, CodeLanguage } from '@dsa-studio/shared';
-import type { Prisma } from '@prisma/client';
-
-type TestCase = Prisma.TestCaseGetPayload<Record<string, never>>;
+import type { DbTestCase } from '../types/db.js';
 import { executeCode, outputsMatch } from '../sandbox/executor.js';
 
 export interface TestCaseResult {
@@ -26,7 +24,7 @@ export interface GradingResult {
 export async function gradeSubmission(
   language: CodeLanguage,
   code: string,
-  testCases: TestCase[],
+  testCases: DbTestCase[],
   options: { sampleOnly?: boolean } = {},
 ): Promise<GradingResult> {
   const cases = options.sampleOnly

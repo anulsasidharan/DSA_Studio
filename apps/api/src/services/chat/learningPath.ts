@@ -39,12 +39,28 @@ export async function generateLearningPath(userId: string): Promise<LearningPath
     }),
   ]);
 
-  const topicStats = topics.map((topic) => {
-    const rows = progressByTopic.filter((p) => p.topicId === topic.topicId);
+  type TopicRow = (typeof topics)[number];
+  type ProgressRow = (typeof progressByTopic)[number];
+
+  interface TopicStat {
+    slug: string;
+    name: string;
+    difficulty: string;
+    solved: number;
+    attempted: number;
+    total: number;
+    percentage: number;
+  }
+
+  const topicStats: TopicStat[] = topics.map((topic: TopicRow) => {
+    const rows = progressByTopic.filter((p: ProgressRow) => p.topicId === topic.topicId);
     const solved = rows
-      .filter((r) => r.status === 'solved' || r.status === 'mastered')
-      .reduce((sum, r) => sum + r._count.questionId, 0);
-    const attempted = rows.reduce((sum, r) => sum + r._count.questionId, 0);
+      .filter((r: ProgressRow) => r.status === 'solved' || r.status === 'mastered')
+      .reduce((sum: number, r: ProgressRow) => sum + r._count.questionId, 0);
+    const attempted = rows.reduce(
+      (sum: number, r: ProgressRow) => sum + r._count.questionId,
+      0,
+    );
     const total = topic.totalQuestions ?? 0;
 
     return {
@@ -59,17 +75,19 @@ export async function generateLearningPath(userId: string): Promise<LearningPath
   });
 
   const weakTopics = topicStats
-    .filter((t) => t.attempted > 0 && t.percentage < 50)
-    .sort((a, b) => a.percentage - b.percentage)
+    .filter((t: TopicStat) => t.attempted > 0 && t.percentage < 50)
+    .sort((a: TopicStat, b: TopicStat) => a.percentage - b.percentage)
     .slice(0, 3)
-    .map((t) => t.name);
+    .map((t: TopicStat) => t.name);
 
-  const notStarted = topicStats.filter((t) => t.attempted === 0).slice(0, 5);
+  const notStarted = topicStats.filter((t: TopicStat) => t.attempted === 0).slice(0, 5);
 
   const ruleBasedSteps: LearningPathStep[] = [];
   let order = 1;
 
-  for (const weak of topicStats.filter((t) => t.percentage < 50 && t.attempted > 0).slice(0, 2)) {
+  for (const weak of topicStats
+    .filter((t: TopicStat) => t.percentage < 50 && t.attempted > 0)
+    .slice(0, 2)) {
     ruleBasedSteps.push({
       order: order++,
       topicSlug: weak.slug,
@@ -90,7 +108,7 @@ export async function generateLearningPath(userId: string): Promise<LearningPath
   }
 
   const progressSummary = topicStats
-    .map((t) => `${t.name}: ${t.solved}/${t.total} solved (${t.percentage}%)`)
+    .map((t: TopicStat) => `${t.name}: ${t.solved}/${t.total} solved (${t.percentage}%)`)
     .join('\n');
 
   const result = await completeLLM({
@@ -106,7 +124,7 @@ Recommend 3-5 topics in learning order. Use only topic slugs from the provided l
       },
       {
         role: 'user',
-        content: `Learner profile:\n${userContext}\n\nTopic progress:\n${progressSummary}\n\nAvailable slugs: ${topics.map((t) => t.slug).join(', ')}\n\nRule-based suggestions already: ${JSON.stringify(ruleBasedSteps)}`,
+        content: `Learner profile:\n${userContext}\n\nTopic progress:\n${progressSummary}\n\nAvailable slugs: ${topics.map((t: TopicRow) => t.slug).join(', ')}\n\nRule-based suggestions already: ${JSON.stringify(ruleBasedSteps)}`,
       },
     ],
     maxTokens: 768,
@@ -127,9 +145,9 @@ Recommend 3-5 topics in learning order. Use only topic slugs from the provided l
 
     if (Array.isArray(parsed.steps) && parsed.steps.length > 0) {
       aiSteps = parsed.steps
-        .filter((s) => topics.some((t) => t.slug === s.topicSlug))
+        .filter((s) => topics.some((t: TopicRow) => t.slug === s.topicSlug))
         .map((s, i) => {
-          const stat = topicStats.find((t) => t.slug === s.topicSlug);
+          const stat = topicStats.find((t: TopicStat) => t.slug === s.topicSlug);
           return {
             order: s.order ?? i + 1,
             topicSlug: s.topicSlug,
@@ -144,8 +162,8 @@ Recommend 3-5 topics in learning order. Use only topic slugs from the provided l
   }
 
   const stepsWithQuestions = await Promise.all(
-    aiSteps.map(async (step) => {
-      const topic = topics.find((t) => t.slug === step.topicSlug);
+    aiSteps.map(async (step: LearningPathStep) => {
+      const topic = topics.find((t: TopicRow) => t.slug === step.topicSlug);
       if (!topic) return step;
 
       const nextQuestion = await prisma.question.findFirst({
