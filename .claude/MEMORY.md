@@ -82,11 +82,11 @@
 | 1 | Foundation | **Complete** | All P1-* tasks done; ready for Phase 2 Learning Hub |
 | 2 | Learning Hub | **Complete** | Topic browser, theory, practice UI, Monaco, sandbox, submit, hints, solutions |
 | 3 | Progress Tracking | **Complete** | Progress/daily APIs, streaks, analytics, `/track` dashboard, calendar, goals, badges |
-| 4 | Advanced Features | Not started | Revision queue, custom import |
+| 4 | Advanced Features | **Complete** | Spaced repetition (`/revision`), import manual/CSV/JSON/URL + history (`/import`) |
 | 5 | AI Integration | Not started | Chatbot, hints, classification |
 | 6 | Polish & Launch | Not started | Tests, CI/CD, production deploy |
 
-**Active focus:** Phase 4 — Advanced Features (see `TASKS.md` P4-*)
+**Active focus:** Phase 5 — AI Integration (see `TASKS.md` P5-*)
 
 ### Product policies (Phase 2)
 

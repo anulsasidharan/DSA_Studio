@@ -1,8 +1,11 @@
 import type {
   AnalyticsResponse,
   HealthCheckResponse,
+  ImportHistoryItemDto,
+  ImportQuestionResult,
   PaginatedResponse,
   ProgressOverviewResponse,
+  RevisionQueueResponse,
   StreakInfoResponse,
   User,
 } from '@dsa-studio/shared';
@@ -207,4 +210,66 @@ export const apiClient = {
 
   getAnalytics: (days = 30) =>
     request<AnalyticsResponse>(`/api/progress/analytics?days=${days}`),
+
+  getRevisionQueue: (includeCompleted = false) => {
+    const q = includeCompleted ? '?includeCompleted=true' : '';
+    return request<RevisionQueueResponse>(`/api/revision/queue${q}`);
+  },
+
+  getRevisionDue: () => request<RevisionQueueResponse>('/api/revision/due'),
+
+  addRevision: (body: { questionId: string; scheduledDate?: string; reason?: string }) =>
+    request<{ item: RevisionQueueResponse['items'][0] }>('/api/revision/add', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  completeRevision: (id: string) =>
+    request<{ item: RevisionQueueResponse['items'][0] }>(`/api/revision/${id}/complete`, {
+      method: 'PUT',
+    }),
+
+  importManual: (body: Record<string, unknown>) =>
+    request<{ question: ImportQuestionResult }>('/api/import/manual', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  importCsv: (content: string) =>
+    request<{ imported: number; questions: ImportQuestionResult[] }>('/api/import/csv', {
+      method: 'POST',
+      body: JSON.stringify({ content }),
+    }),
+
+  importJson: (body: { questions: Record<string, unknown>[] }) =>
+    request<{ imported: number; questions: ImportQuestionResult[] }>('/api/import/json', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  importUrlPreview: (url: string) =>
+    request<{
+      preview: {
+        source: string;
+        sourceName: string;
+        sourceUrl: string;
+        suggestedTitle: string;
+        suggestedSlug: string;
+        platform: string;
+      };
+      message: string;
+      template: Record<string, unknown>;
+    }>('/api/import/url', {
+      method: 'POST',
+      body: JSON.stringify({ url }),
+    }),
+
+  importUrlConfirm: (body: Record<string, unknown>) =>
+    request<{ question: ImportQuestionResult }>('/api/import/url', {
+      method: 'POST',
+      body: JSON.stringify({ ...body, confirm: true }),
+    }),
+
+  getImportHistory: (page = 1) =>
+    request<PaginatedResponse<ImportHistoryItemDto>>(`/api/import/history?page=${page}`),
 };

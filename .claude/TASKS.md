@@ -54,12 +54,12 @@
 
 | Task | Branch | Status |
 |------|--------|--------|
-| P4-1 · Revision queue model + scheduler | `feature/revision-scheduler` | ❌ Pending |
-| P4-2 · Revision APIs (due, complete, add) | `feature/revision-api` | ❌ Pending |
-| P4-3 · Revision dashboard UI | `feature/revision-ui` | ❌ Pending |
-| P4-4 · Manual question entry | `feature/import-manual` | ❌ Pending |
-| P4-5 · CSV + JSON import | `feature/import-bulk` | ❌ Pending |
-| P4-6 · URL-assisted import + history | `feature/import-url` | ❌ Pending |
+| P4-1 · Revision queue model + scheduler | `feature/revision-scheduler` | ✅ Completed |
+| P4-2 · Revision APIs (due, complete, add) | `feature/revision-api` | ✅ Completed |
+| P4-3 · Revision dashboard UI | `feature/revision-ui` | ✅ Completed |
+| P4-4 · Manual question entry | `feature/import-manual` | ✅ Completed |
+| P4-5 · CSV + JSON import | `feature/import-bulk` | ✅ Completed |
+| P4-6 · URL-assisted import + history | `feature/import-url` | ✅ Completed |
 
 ---
 

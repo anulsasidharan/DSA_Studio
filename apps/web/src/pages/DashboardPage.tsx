@@ -154,9 +154,17 @@ export function DashboardPage() {
           <Link to="/practice">Start practicing</Link>
         </Button>
         {token && (
-          <Button variant="outline" asChild>
-            <Link to="/track">View progress</Link>
-          </Button>
+          <>
+            <Button variant="outline" asChild>
+              <Link to="/track">View progress</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/revision">Revision queue</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/import">Import questions</Link>
+            </Button>
+          </>
         )}
       </section>
     </div>

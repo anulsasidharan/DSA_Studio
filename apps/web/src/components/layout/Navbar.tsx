@@ -1,4 +1,4 @@
-import { BookOpen, Bot, Code2, Home, LineChart, LogIn, LogOut } from 'lucide-react';
+import { BookMarked, BookOpen, Bot, Code2, Home, LineChart, LogIn, LogOut, Upload } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,8 @@ const navItems = [
   { label: 'Learn', icon: BookOpen, to: '/learn' },
   { label: 'Practice', icon: Code2, to: '/practice' },
   { label: 'Track', icon: LineChart, to: '/track' },
+  { label: 'Revision', icon: BookMarked, to: '/revision' },
+  { label: 'Import', icon: Upload, to: '/import' },
   { label: 'Assistant', icon: Bot, to: '/assistant' },
 ] as const;
 

@@ -139,3 +139,56 @@ export interface AnalyticsResponse {
   };
   badges: BadgeDto[];
 }
+
+/** Revision queue item with question summary */
+export interface RevisionQueueItemDto {
+  id: string;
+  userId: string;
+  questionId: string;
+  scheduledDate: string;
+  priority: 1 | 2 | 3 | 4 | 5;
+  reason: string;
+  completed: boolean;
+  completedAt: string | null;
+  createdAt: string;
+  question: {
+    slug: string;
+    title: string;
+    difficulty: string;
+    topicSlug: string | null;
+    topicName: string | null;
+  };
+}
+
+export interface RevisionStatsDto {
+  dueToday: number;
+  upcomingWeek: number;
+  reviewedThisWeek: number;
+}
+
+export interface RevisionQueueResponse {
+  items: RevisionQueueItemDto[];
+  stats: RevisionStatsDto;
+}
+
+export interface ImportHistoryItemDto {
+  id: string;
+  questionId: string;
+  importMethod: string;
+  sourceName: string | null;
+  sourceUrl: string | null;
+  createdAt: string;
+  question: {
+    slug: string;
+    title: string;
+    difficulty: string;
+    topicSlug: string;
+    topicName: string;
+  };
+}
+
+export interface ImportQuestionResult {
+  questionId: string;
+  slug: string;
+  title: string;
+}
