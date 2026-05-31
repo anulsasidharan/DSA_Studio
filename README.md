@@ -106,6 +106,16 @@ npm run docker:down
 
 **Port conflicts:** If `npm run dev:api` or `npm run dev:web` is already running, stop them first (Docker uses ports 4000 and 8080 by default). Or set `API_PORT` / `WEB_PORT` in `infra/docker/.env`.
 
+**Chatbot API key (Docker):** add to `infra/docker/.env`, then recreate the API container:
+
+```bash
+OPENAI_API_KEY=sk-your-key-here
+# LLM_PROVIDER=openai
+npm run docker:down && npm run docker:up
+```
+
+For local dev without Docker, use `apps/api/.env` instead (never `apps/web/.env`).
+
 ## Scripts
 
 | Command | Description |

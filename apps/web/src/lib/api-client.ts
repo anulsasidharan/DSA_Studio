@@ -14,6 +14,31 @@ import { useAuthStore } from '@/store/authStore';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
+type ZodFlattenedError = {
+  formErrors: string[];
+  fieldErrors: Record<string, string[]>;
+};
+
+function formatApiErrorMessage(
+  error: { message: string; details?: unknown } | undefined,
+  fallback: string,
+): string {
+  if (!error) return fallback;
+
+  const details = error.details as ZodFlattenedError | undefined;
+  if (details?.fieldErrors) {
+    const fieldMessages = Object.values(details.fieldErrors).flat();
+    if (fieldMessages.length > 0) {
+      return fieldMessages.join(' ');
+    }
+  }
+  if (details?.formErrors?.length) {
+    return details.formErrors.join(' ');
+  }
+
+  return error.message || fallback;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const token = useAuthStore.getState().token;
   const response = await fetch(`${API_BASE}${path}`, {
@@ -25,10 +50,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
 
-  const body = (await response.json()) as { success: boolean; data?: T; error?: { message: string } };
+  const body = (await response.json()) as {
+    success: boolean;
+    data?: T;
+    error?: { message: string; details?: unknown };
+  };
 
   if (!response.ok || body.success === false) {
-    const message = body.success === false ? body.error!.message : `Request failed (${response.status})`;
+    const message =
+      body.success === false
+        ? formatApiErrorMessage(body.error, 'Request failed')
+        : `Request failed (${response.status})`;
     throw new Error(message);
   }
 

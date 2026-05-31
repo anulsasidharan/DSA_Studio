@@ -45,7 +45,19 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
         {mode === 'register' && (
           <div>
             <label className="mb-1 block text-sm font-medium">Username</label>
-            <Input value={username} onChange={(e) => setUsername(e.target.value)} required />
+            <Input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              minLength={3}
+              maxLength={50}
+              pattern="[a-zA-Z0-9_]+"
+              title="Letters, numbers, and underscores only"
+              autoComplete="username"
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              3–50 characters; letters, numbers, and underscores only
+            </p>
           </div>
         )}
         <div>
@@ -59,8 +71,12 @@ export function AuthDialog({ open, onOpenChange }: AuthDialogProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={6}
+            minLength={8}
+            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
           />
+          {mode === 'register' && (
+            <p className="mt-1 text-xs text-muted-foreground">At least 8 characters</p>
+          )}
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" className="w-full" disabled={loading}>
