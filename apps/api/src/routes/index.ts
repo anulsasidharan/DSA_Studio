@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authRouter } from './auth.js';
+import { chatRouter } from './chat.js';
 import { docsRouter } from './docs.js';
 import { healthRouter } from './health.js';
 import { importRouter } from './import.js';
@@ -20,3 +21,4 @@ apiRouter.use('/questions', questionsRouter);
 apiRouter.use('/progress', progressRouter);
 apiRouter.use('/revision', revisionRouter);
 apiRouter.use('/import', importRouter);
+apiRouter.use('/chat', chatRouter);

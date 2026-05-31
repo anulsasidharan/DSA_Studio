@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Navbar } from '@/components/layout/Navbar';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { LearnPage } from '@/pages/LearnPage';
@@ -8,7 +8,7 @@ import { ImportPage } from '@/pages/ImportPage';
 import { RevisionPage } from '@/pages/RevisionPage';
 import { TrackPage } from '@/pages/TrackPage';
 import { TopicDetailPage } from '@/pages/TopicDetailPage';
-
+import { AssistantPage } from '@/pages/AssistantPage';
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
@@ -31,7 +31,7 @@ function App() {
           <Route path="/track" element={<TrackPage />} />
           <Route path="/revision" element={<RevisionPage />} />
           <Route path="/import" element={<ImportPage />} />
-          <Route path="/assistant" element={<Navigate to="/" replace />} />
+          <Route path="/assistant" element={<AssistantPage />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

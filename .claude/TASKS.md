@@ -67,12 +67,12 @@
 
 | Task | Branch | Status |
 |------|--------|--------|
-| P5-1 · LLM provider integration | `feature/llm-client` | ❌ Pending |
-| P5-2 · Chat API + context builder | `feature/chat-api` | ❌ Pending |
-| P5-3 · Chatbot UI | `feature/chat-ui` | ❌ Pending |
-| P5-4 · Code review endpoint | `feature/code-review` | ❌ Pending |
-| P5-5 · Import AI classification | `feature/ai-classify` | ❌ Pending |
-| P5-6 · Learning path recommendations | `feature/learning-path-ai` | ❌ Pending |
+| P5-1 · LLM provider integration | `feature/llm-client` | ✅ Completed |
+| P5-2 · Chat API + context builder | `feature/chat-api` | ✅ Completed |
+| P5-3 · Chatbot UI | `feature/chat-ui` | ✅ Completed |
+| P5-4 · Code review endpoint | `feature/code-review` | ✅ Completed |
+| P5-5 · Import AI classification | `feature/ai-classify` | ✅ Completed |
+| P5-6 · Learning path recommendations | `feature/learning-path-ai` | ✅ Completed |
 
 ---
 

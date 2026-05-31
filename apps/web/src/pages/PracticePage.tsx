@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Bookmark, Lightbulb, Play, Send } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import type { CodeLanguage } from '@dsa-studio/shared';
+import { ChatPanel } from '@/components/chat/ChatPanel';
 import { AuthDialog } from '@/components/auth/AuthDialog';
 import { CodeEditor } from '@/components/editor/CodeEditor';
 import { Badge } from '@/components/ui/badge';
@@ -349,6 +350,15 @@ export function PracticePage() {
               )}
             </CardContent>
           </Card>
+
+          {token && (
+            <ChatPanel
+              questionId={question.id}
+              code={code}
+              language={language}
+              compact
+            />
+          )}
         </div>
       </div>
 

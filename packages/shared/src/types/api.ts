@@ -192,3 +192,93 @@ export interface ImportQuestionResult {
   slug: string;
   title: string;
 }
+
+/** POST /api/chat/query */
+export interface ChatQueryResponse {
+  sessionId: string;
+  reply: string;
+  tokensUsed: number;
+  provider: string;
+}
+
+/** POST /api/chat/hint */
+export interface ChatHintResponse {
+  sessionId: string;
+  hint: string;
+  tier: number;
+  totalTiers: number;
+  showApproach: boolean;
+  tokensUsed: number;
+  provider: string;
+}
+
+/** POST /api/chat/review */
+export interface CodeReviewResponse {
+  sessionId: string;
+  review: string;
+  tokensUsed: number;
+  provider: string;
+}
+
+export interface ChatHistoryItemDto {
+  sessionId: string;
+  title: string;
+  questionId: string | null;
+  questionSlug: string | null;
+  lastMessage: {
+    role: string;
+    content: string;
+    messageType: string;
+    createdAt: string;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface ChatMessageDto {
+  id: string;
+  role: string;
+  content: string;
+  messageType: string;
+  createdAt: string;
+}
+
+export interface ChatSessionDetailDto {
+  sessionId: string;
+  questionId: string | null;
+  question: { title: string; slug: string; questionId: string } | null;
+  messages: ChatMessageDto[];
+}
+
+/** POST /api/import/classify */
+export interface ImportClassifyResponse {
+  classification: {
+    title: string;
+    description: string;
+    difficulty: string;
+    topicSlug: string;
+    tags: string[];
+    constraints: string | null;
+    inputFormat: string | null;
+    outputFormat: string | null;
+    suggestedHints: string[];
+    confidence: 'high' | 'medium' | 'low';
+  };
+  message: string;
+  originalContent: { rawText: string };
+}
+
+/** GET /api/chat/learning-path */
+export interface LearningPathResponse {
+  summary: string;
+  steps: Array<{
+    order: number;
+    topicSlug: string;
+    topicName: string;
+    reason: string;
+    completionPercentage?: number;
+    suggestedQuestionSlug?: string | null;
+  }>;
+  weakTopics: string[];
+  provider: string;
+}

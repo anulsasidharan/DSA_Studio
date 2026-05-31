@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Phase 3 **complete** — Progress APIs, streaks, analytics, dashboard/track UI, calendar, goals, badges
+**Repository state:** Phase 5 **complete** — LLM client, chat API/UI, code review, import classification, learning path AI
 
 ---
 
@@ -33,7 +33,7 @@
 | ORM | **Prisma 6** | Locked at P1-3 — full 11-table schema + migrations |
 | Primary DB | PostgreSQL 15+ | Relational model for users, questions, progress |
 | Cache | Redis | Sessions, leaderboards, hot question lists |
-| AI provider | OpenAI GPT-4 **or** Claude API | Chatbot, hints, import classification |
+| AI provider | OpenAI GPT-4 **or** Claude API | Chatbot, hints, import classification — **mock fallback when no API key** |
 | Code execution | Docker containers | Sandboxed per-language runs |
 | Real-time (optional) | Socket.io | Live tracker / notifications |
 | File storage | AWS S3 or GCS | Avatars, import assets |
@@ -83,10 +83,10 @@
 | 2 | Learning Hub | **Complete** | Topic browser, theory, practice UI, Monaco, sandbox, submit, hints, solutions |
 | 3 | Progress Tracking | **Complete** | Progress/daily APIs, streaks, analytics, `/track` dashboard, calendar, goals, badges |
 | 4 | Advanced Features | **Complete** | Spaced repetition (`/revision`), import manual/CSV/JSON/URL + history (`/import`) |
-| 5 | AI Integration | Not started | Chatbot, hints, classification |
+| 5 | AI Integration | **Complete** | LLM client (OpenAI/Anthropic/mock), `/api/chat/*`, Assistant UI, code review, import classify, learning path |
 | 6 | Polish & Launch | Not started | Tests, CI/CD, production deploy |
 
-**Active focus:** Phase 5 — AI Integration (see `TASKS.md` P5-*)
+**Active focus:** Phase 6 — Polish & Launch (see `TASKS.md` P6-*)
 
 ### Product policies (Phase 2)
 
@@ -129,11 +129,24 @@
 
 ---
 
+### Product policies (Phase 5)
+
+| Policy | Decision |
+|--------|----------|
+| LLM provider | `LLM_PROVIDER=auto` picks OpenAI if key set, else Anthropic, else mock |
+| Chat rate limits | 30 queries/hour, 10 reviews/hour, 20 classify/hour (Redis or in-memory) |
+| Hint tiers | AI hints tracked in `user_hint_tiers`; Socratic tiers 1–3 before approach |
+| Solutions in chat | No full solution on tier 1; approach only after tier 2+ or explicit request |
+| Import classify | User must review AI output before `POST /api/import/manual` |
+| Chat history | Persisted in `chat_sessions` + `chat_messages` |
+
+---
+
 ## Changelog (memory)
 
 | Date | Change |
 |------|--------|
-| 2026-05-31 | Phase 3 complete: progress/daily/streak/analytics APIs, auto daily activity on submit, `/track` UI with Recharts, calendar, goal setting, minimal badges |
+| 2026-05-31 | Phase 5 complete: LLM client, chat query/hint/review/history APIs, Assistant page, practice chat panel, import AI classify, learning path recommendations |
 | 2026-05-31 | Phase 2 complete: Learn/Practice UI, Monaco, POST /api/run & /api/submit, hints, solutions (gated), Docker sandbox images |
 | 2026-05-31 | Phase 1 complete: Prisma schema (11 tables), JWT auth, topics/questions REST, seed (8 topics, 40 questions), OpenAPI at `/api/docs` |
 | 2026-05-31 | P1-2 Docker Compose: PostgreSQL 15 + Redis at `infra/docker/`; npm `docker:*` scripts |

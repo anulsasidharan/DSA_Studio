@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileJson, FileSpreadsheet, History, Link2, PenLine, Plus, Trash2 } from 'lucide-react';
+import { FileJson, FileSpreadsheet, History, Link2, PenLine, Plus, Sparkles, Trash2 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import { AuthDialog } from '@/components/auth/AuthDialog';
 import { Badge } from '@/components/ui/badge';
@@ -91,6 +91,10 @@ export function ImportPage() {
             <Link2 className="mr-2 h-4 w-4 inline" />
             URL
           </TabsTrigger>
+          <TabsTrigger value="ai">
+            <Sparkles className="mr-2 h-4 w-4 inline" />
+            AI Paste
+          </TabsTrigger>
           <TabsTrigger value="history">
             <History className="mr-2 h-4 w-4 inline" />
             History
@@ -108,6 +112,9 @@ export function ImportPage() {
         </TabsContent>
         <TabsContent value="url" className="mt-6">
           <UrlImportForm />
+        </TabsContent>
+        <TabsContent value="ai" className="mt-6">
+          <AiImportForm />
         </TabsContent>
         <TabsContent value="history" className="mt-6">
           <ImportHistoryPanel />
@@ -562,6 +569,171 @@ function UrlImportForm() {
             {loading ? 'Parsing…' : 'Continue'}
           </Button>
         </form>
+      </CardContent>
+    </Card>
+  );
+}
+
+function AiImportForm() {
+  const [rawText, setRawText] = useState('');
+  const [classifying, setClassifying] = useState(false);
+  const [classification, setClassification] = useState<
+    import('@dsa-studio/shared').ImportClassifyResponse['classification'] | null
+  >(null);
+  const [saving, setSaving] = useState(false);
+
+  async function handleClassify() {
+    if (!rawText.trim()) {
+      toast.error('Paste problem text first');
+      return;
+    }
+    setClassifying(true);
+    setClassification(null);
+    try {
+      const result = await apiClient.classifyImport(rawText);
+      setClassification(result.classification);
+      toast.success('AI classification ready — review before saving');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Classification failed');
+    } finally {
+      setClassifying(false);
+    }
+  }
+
+  async function handleSave() {
+    if (!classification) return;
+    setSaving(true);
+    try {
+      await apiClient.importManual({
+        title: classification.title,
+        description: classification.description,
+        difficulty: classification.difficulty,
+        topicSlug: classification.topicSlug,
+        tags: classification.tags,
+        constraints: classification.constraints ?? undefined,
+        inputFormat: classification.inputFormat ?? undefined,
+        outputFormat: classification.outputFormat ?? undefined,
+        hints: classification.suggestedHints,
+        testCases: [{ input: 'TBD', expectedOutput: 'TBD', isSample: true }],
+        source: 'custom',
+        sourceName: 'AI-assisted import',
+      });
+      toast.success('Question saved!');
+      setRawText('');
+      setClassification(null);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>AI-assisted import</CardTitle>
+        <CardDescription>
+          Paste raw problem text. AI suggests title, difficulty, topic, and tags — you review and
+          confirm before saving.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Field label="Problem text">
+          <textarea
+            className="min-h-[200px] w-full rounded-md border bg-background px-3 py-2 text-sm"
+            value={rawText}
+            onChange={(e) => setRawText(e.target.value)}
+            placeholder="Paste the full problem statement from any source…"
+          />
+        </Field>
+        <Button onClick={handleClassify} disabled={classifying || !rawText.trim()}>
+          {classifying ? 'Classifying…' : 'Classify with AI'}
+        </Button>
+
+        {classification && (
+          <div className="space-y-4 rounded-lg border bg-muted/30 p-4">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">Confidence: {classification.confidence}</Badge>
+            </div>
+            <Field label="Title">
+              <Input
+                value={classification.title}
+                onChange={(e) =>
+                  setClassification({ ...classification, title: e.target.value })
+                }
+              />
+            </Field>
+            <Field label="Description">
+              <textarea
+                className="min-h-[120px] w-full rounded-md border bg-background px-3 py-2 text-sm"
+                value={classification.description}
+                onChange={(e) =>
+                  setClassification({ ...classification, description: e.target.value })
+                }
+              />
+            </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Difficulty">
+                <Select
+                  value={classification.difficulty}
+                  onChange={(e) =>
+                    setClassification({
+                      ...classification,
+                      difficulty: e.target.value as Difficulty,
+                    })
+                  }
+                >
+                  {DIFFICULTIES.map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Topic">
+                <Select
+                  value={classification.topicSlug}
+                  onChange={(e) =>
+                    setClassification({ ...classification, topicSlug: e.target.value })
+                  }
+                >
+                  {DEFAULT_TOPICS.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            </div>
+            <Field label="Tags">
+              <Input
+                value={classification.tags.join(', ')}
+                onChange={(e) =>
+                  setClassification({
+                    ...classification,
+                    tags: e.target.value.split(',').map((t) => t.trim()).filter(Boolean),
+                  })
+                }
+              />
+            </Field>
+            {classification.suggestedHints.length > 0 && (
+              <div>
+                <p className="mb-2 text-sm font-medium">Suggested hints</p>
+                <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  {classification.suggestedHints.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground">
+              Add at least one test case on the Manual tab after saving, or edit this question later.
+            </p>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving…' : 'Confirm & save question'}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

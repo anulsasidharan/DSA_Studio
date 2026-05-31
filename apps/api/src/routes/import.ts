@@ -10,6 +10,7 @@ import {
   parseImportUrl,
   parseJsonImport,
 } from '../services/import.js';
+import { classifyImportContent } from '../services/chat/classifyImport.js';
 import {
   csvImportSchema,
   jsonImportSchema,
@@ -17,11 +18,34 @@ import {
   urlImportConfirmSchema,
   urlImportPreviewSchema,
 } from '../validators/import.js';
+import { classifyImportSchema } from '../validators/chat.js';
+import { rateLimit } from '../middleware/rateLimit.js';
 import { z } from 'zod';
 
 export const importRouter = Router();
 
 importRouter.use(requireAuth);
+
+const classifyRateLimit = rateLimit({
+  keyPrefix: 'rl:classify',
+  limit: Number(process.env.RATE_LIMIT_CLASSIFY_HOUR ?? 20),
+});
+
+importRouter.post('/classify', classifyRateLimit, validate(classifyImportSchema), async (req: AuthenticatedRequest, res, next) => {
+  try {
+    const { rawText } = req.body as { rawText: string };
+    const classification = await classifyImportContent(rawText);
+    res.json(
+      success({
+        classification,
+        message: 'Review the suggested fields before saving via manual import.',
+        originalContent: { rawText: rawText.slice(0, 10000) },
+      }),
+    );
+  } catch (error) {
+    next(error);
+  }
+});
 
 const historyQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),

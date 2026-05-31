@@ -272,4 +272,39 @@ export const apiClient = {
 
   getImportHistory: (page = 1) =>
     request<PaginatedResponse<ImportHistoryItemDto>>(`/api/import/history?page=${page}`),
+
+  chatQuery: (body: { message: string; questionId?: string; sessionId?: string }) =>
+    request<import('@dsa-studio/shared').ChatQueryResponse>('/api/chat/query', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  chatHint: (body: { questionId: string; showApproach?: boolean; sessionId?: string }) =>
+    request<import('@dsa-studio/shared').ChatHintResponse>('/api/chat/hint', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  chatReview: (body: { questionId: string; code: string; language: string; sessionId?: string }) =>
+    request<import('@dsa-studio/shared').CodeReviewResponse>('/api/chat/review', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
+
+  getChatHistory: (page = 1) =>
+    request<PaginatedResponse<import('@dsa-studio/shared').ChatHistoryItemDto>>(
+      `/api/chat/history?page=${page}`,
+    ),
+
+  getChatSession: (sessionId: string) =>
+    request<import('@dsa-studio/shared').ChatSessionDetailDto>(`/api/chat/history/${sessionId}`),
+
+  getLearningPath: () =>
+    request<import('@dsa-studio/shared').LearningPathResponse>('/api/chat/learning-path'),
+
+  classifyImport: (rawText: string) =>
+    request<import('@dsa-studio/shared').ImportClassifyResponse>('/api/import/classify', {
+      method: 'POST',
+      body: JSON.stringify({ rawText }),
+    }),
 };
