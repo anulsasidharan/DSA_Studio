@@ -14,11 +14,11 @@
 |------|--------|--------|
 | P1-1 · Monorepo scaffold (`apps/web`, `apps/api`, `packages/shared`) | `feature/monorepo-scaffold` | ✅ Completed |
 | P1-2 · Docker Compose (PostgreSQL, Redis) | `feature/docker-compose` | ✅ Completed |
-| P1-3 · Prisma schema (all tables from spec) | `feature/prisma-schema` | ❌ Pending |
-| P1-4 · Auth (JWT register/login/me) | `feature/auth-jwt` | ❌ Pending |
-| P1-5 · Topics & questions REST + validation | `feature/core-apis` | ❌ Pending |
-| P1-6 · DB seed (sample topics/questions) | `feature/db-seed` | ❌ Pending |
-| P1-7 · Swagger / OpenAPI | `feature/openapi` | ❌ Pending |
+| P1-3 · Prisma schema (all tables from spec) | `feature/prisma-schema` | ✅ Completed |
+| P1-4 · Auth (JWT register/login/me) | `feature/auth-jwt` | ✅ Completed |
+| P1-5 · Topics & questions REST + validation | `feature/core-apis` | ✅ Completed |
+| P1-6 · DB seed (sample topics/questions) | `feature/db-seed` | ✅ Completed |
+| P1-7 · Swagger / OpenAPI | `feature/openapi` | ✅ Completed |
 
 ---
 

@@ -15,19 +15,19 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 - [x] Initialize monorepo: `apps/web` (React + TS + Tailwind + shadcn), `apps/api` (Express + TS)
 - [x] `packages/shared` — shared TypeScript types
 - [x] Docker Compose: PostgreSQL 15, Redis
-- [ ] Prisma (or TypeORM) — all tables from spec § Data Model
-- [ ] `.env.example` + gitignore secrets
-- [ ] JWT auth: register, login, logout, `GET /api/auth/me`
+- [x] Prisma — all tables from spec § Data Model
+- [x] `.env.example` + gitignore secrets
+- [x] JWT auth: register, login, logout, `GET /api/auth/me`
 
 **Exit:** `docker compose up` + login returns JWT; health check green.
 
 ### Weeks 3–4: Core database & API
 
-- [ ] Seed script: sample topics + 5–10 questions per major category
-- [ ] REST: topics list/detail, questions list/detail/filter
-- [ ] Solutions CRUD (read for learners; write for admin/import)
-- [ ] Input validation + centralized error handler
-- [ ] OpenAPI / Swagger at `/api/docs`
+- [x] Seed script: sample topics + 5–10 questions per major category
+- [x] REST: topics list/detail, questions list/detail/filter
+- [x] Solutions CRUD (read for learners; write for admin/import)
+- [x] Input validation + centralized error handler
+- [x] OpenAPI / Swagger at `/api/docs`
 
 **Exit:** Postman/curl can list topics and fetch question with test cases (samples only).
 
