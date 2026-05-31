@@ -1,6 +1,7 @@
 import type { AttemptStatus } from '@dsa-studio/shared';
 import { prisma } from '../lib/prisma.js';
 import { updateDailyActivityOnAttempt } from './dailyActivity.js';
+import { markRevisionWrong, scheduleOnSolve } from './revision.js';
 
 export async function recordAttempt(
   userId: string,
@@ -91,6 +92,7 @@ export async function recordAttempt(
     });
 
     if (isNewSolve) {
+      await scheduleOnSolve(userId, questionId);
       await prisma.user.update({
         where: { userId },
         data: {
@@ -109,6 +111,10 @@ export async function recordAttempt(
       where: { questionId },
       data: { totalAttempts: { increment: 1 } },
     });
+
+    if (wasSolved) {
+      await markRevisionWrong(userId, questionId);
+    }
 
     await prisma.user.update({
       where: { userId },

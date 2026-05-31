@@ -4,6 +4,8 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { LearnPage } from '@/pages/LearnPage';
 import { PracticeListPage } from '@/pages/PracticeListPage';
 import { PracticePage } from '@/pages/PracticePage';
+import { ImportPage } from '@/pages/ImportPage';
+import { RevisionPage } from '@/pages/RevisionPage';
 import { TrackPage } from '@/pages/TrackPage';
 import { TopicDetailPage } from '@/pages/TopicDetailPage';
 
@@ -27,6 +29,8 @@ function App() {
           <Route path="/practice" element={<PracticeListPage />} />
           <Route path="/practice/:questionSlug" element={<PracticePage />} />
           <Route path="/track" element={<TrackPage />} />
+          <Route path="/revision" element={<RevisionPage />} />
+          <Route path="/import" element={<ImportPage />} />
           <Route path="/assistant" element={<Navigate to="/" replace />} />
         </Routes>
       </AppLayout>

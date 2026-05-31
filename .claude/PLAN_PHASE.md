@@ -88,19 +88,19 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 
 ### Weeks 13–14: Revision system
 
-- [ ] `revision_queue` CRUD + due today query
-- [ ] Schedule on solve (1, 3, 7, 14, 30 day intervals)
-- [ ] Priority calculation per spec Python logic (port to TS)
-- [ ] Revision dashboard UI
+- [x] `revision_queue` CRUD + due today query
+- [x] Schedule on solve (1, 3, 7, 14, 30 day intervals)
+- [x] Priority calculation per spec Python logic (port to TS)
+- [x] Revision dashboard UI
 
 **Exit:** Solved question appears in due queue on correct day.
 
 ### Weeks 15–16: Custom questions
 
-- [ ] Manual entry form (rich text + test case builder)
-- [ ] CSV + JSON bulk import with validation
-- [ ] URL-assisted import (user review step)
-- [ ] `custom_questions` linkage + import history API
+- [x] Manual entry form (rich text + test case builder)
+- [x] CSV + JSON bulk import with validation
+- [x] URL-assisted import (user review step)
+- [x] `custom_questions` linkage + import history API
 
 **Exit:** User imports 1 question via JSON and sees it in practice list.
 
