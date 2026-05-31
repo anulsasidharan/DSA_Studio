@@ -1,4 +1,4 @@
-import type { ChatMessageType } from '@prisma/client';
+type ChatMessageType = 'query' | 'hint' | 'review';
 import { completeLLM } from '../../lib/llm/index.js';
 import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../middleware/errorHandler.js';

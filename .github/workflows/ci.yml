@@ -27,6 +27,9 @@ jobs:
       - name: Build shared package
         run: npm run build -w @dsa-studio/shared
 
+      - name: Generate Prisma client
+        run: npm run db:generate -w @dsa-studio/api
+
       - name: Lint web
         run: npm run lint -w @dsa-studio/web
 

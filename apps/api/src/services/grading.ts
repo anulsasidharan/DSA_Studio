@@ -1,5 +1,7 @@
 import type { AttemptStatus, CodeLanguage } from '@dsa-studio/shared';
-import type { TestCase } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+
+type TestCase = Prisma.TestCaseGetPayload<Record<string, never>>;
 import { executeCode, outputsMatch } from '../sandbox/executor.js';
 
 export interface TestCaseResult {
