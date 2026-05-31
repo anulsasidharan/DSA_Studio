@@ -65,18 +65,18 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 
 ### Weeks 9–10: Progress backend
 
-- [ ] `GET/POST /api/progress`, daily activity APIs
-- [ ] Streak calculation on goal met
-- [ ] Analytics aggregation endpoints
+- [x] `GET/POST /api/progress`, daily activity APIs
+- [x] Streak calculation on goal met
+- [x] Analytics aggregation endpoints
 
 **Exit:** API returns streak and per-topic completion %.
 
 ### Weeks 11–12: Tracker UI
 
-- [ ] Dashboard: daily summary card, quick stats
-- [ ] Charts: heatmap, weekly bar, topic pie (Recharts/Chart.js)
-- [ ] Calendar view + goal setting UI
-- [ ] Achievement badges (minimal set)
+- [x] Dashboard: daily summary card, quick stats
+- [x] Charts: heatmap, weekly bar, topic pie (Recharts/Chart.js)
+- [x] Calendar view + goal setting UI
+- [x] Achievement badges (minimal set)
 
 **Exit:** Dashboard matches spec wireframe intent (§ Daily Tracker).
 

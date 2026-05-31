@@ -52,3 +52,90 @@ export interface PaginatedResponse<T> {
   items: T[];
   meta: PaginatedMeta;
 }
+
+/** GET /api/progress */
+export interface ProgressOverviewResponse {
+  overall: {
+    totalSolved: number;
+    totalQuestions: number;
+    overallPercentage: number;
+    byDifficulty: Array<{
+      difficulty: string;
+      solved: number;
+      total: number;
+      percentage: number;
+    }>;
+    topicsMastered: number;
+    totalTopics: number;
+    topicBreakdown: Array<{
+      topicId: string;
+      slug: string;
+      name: string;
+      solved: number;
+      total: number;
+      percentage: number;
+      byStatus: Record<string, number>;
+    }>;
+  };
+  streak: StreakInfoResponse;
+  badges: BadgeDto[];
+  badgesEarnedCount: number;
+}
+
+export interface StreakInfoResponse {
+  currentStreak: number;
+  longestStreak: number;
+  totalActiveDays: number;
+  dailyTarget: number;
+  todayGoalMet: boolean;
+  todaySolved: number;
+}
+
+export interface BadgeDto {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  earned: boolean;
+  earnedAt: string | null;
+}
+
+export interface DailyActivityDto {
+  id: string;
+  userId: string;
+  activityDate: string;
+  questionsSolved: number;
+  questionsAttempted: number;
+  timeSpentMinutes: number;
+  topicsCovered: string[];
+  dailyGoalMet: boolean;
+  streakDay: number;
+  notes: string | null;
+}
+
+export interface AnalyticsResponse {
+  periodDays: number;
+  heatmap: Array<{
+    date: string;
+    questionsSolved: number;
+    questionsAttempted: number;
+    timeSpentMinutes: number;
+    level: 0 | 1 | 2 | 3 | 4;
+  }>;
+  weeklyBar: Array<{
+    date: string;
+    label: string;
+    solved: number;
+    attempted: number;
+    minutes: number;
+  }>;
+  topicPie: Array<{ name: string; value: number }>;
+  summary: {
+    totalSolvedInPeriod: number;
+    activeDays: number;
+    averagePerDay: number;
+    peakDay: { date: string; questionsSolved: number } | null;
+    successRate: number;
+  };
+  badges: BadgeDto[];
+}

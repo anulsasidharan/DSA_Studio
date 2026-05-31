@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Phase 2 **complete** — Learning Hub UI, Monaco, code sandbox, submit/run, hints, solutions
+**Repository state:** Phase 3 **complete** — Progress APIs, streaks, analytics, dashboard/track UI, calendar, goals, badges
 
 ---
 
@@ -81,12 +81,12 @@
 |-------|------|--------|-------|
 | 1 | Foundation | **Complete** | All P1-* tasks done; ready for Phase 2 Learning Hub |
 | 2 | Learning Hub | **Complete** | Topic browser, theory, practice UI, Monaco, sandbox, submit, hints, solutions |
-| 3 | Progress Tracking | Not started | Analytics, streaks, goals |
+| 3 | Progress Tracking | **Complete** | Progress/daily APIs, streaks, analytics, `/track` dashboard, calendar, goals, badges |
 | 4 | Advanced Features | Not started | Revision queue, custom import |
 | 5 | AI Integration | Not started | Chatbot, hints, classification |
 | 6 | Polish & Launch | Not started | Tests, CI/CD, production deploy |
 
-**Active focus:** Phase 3 — Progress Tracking (see `TASKS.md` P3-*)
+**Active focus:** Phase 4 — Advanced Features (see `TASKS.md` P4-*)
 
 ### Product policies (Phase 2)
 
@@ -95,6 +95,16 @@
 | Solutions visibility | After first attempt (`attempted`, `solved`, or `mastered`) |
 | Code execution | Local Python/Node by default; set `SANDBOX_USE_DOCKER=true` for Docker images in `infra/docker/sandbox/` |
 | Starter code | Per-question templates in `packages/shared/src/code-templates.ts`; generic fallback for unmapped slugs |
+
+### Product policies (Phase 3)
+
+| Policy | Decision |
+|--------|----------|
+| Daily activity | Auto-updated on each submit; manual log via `POST /api/progress/daily` |
+| Streak | Consecutive days with `daily_goal_met`; recalculated when daily target reached |
+| Daily goal | Stored on user as `dailyTarget`; editable via `PUT /api/auth/profile` and `/track` UI |
+| Badges | Computed server-side: First Steps, First 10, Week Warrior, Topic Master, Streak Legend |
+| Charts | Recharts on `/track` — heatmap, weekly bar, topic pie from `/api/progress/analytics` |
 
 ---
 
@@ -123,6 +133,7 @@
 
 | Date | Change |
 |------|--------|
+| 2026-05-31 | Phase 3 complete: progress/daily/streak/analytics APIs, auto daily activity on submit, `/track` UI with Recharts, calendar, goal setting, minimal badges |
 | 2026-05-31 | Phase 2 complete: Learn/Practice UI, Monaco, POST /api/run & /api/submit, hints, solutions (gated), Docker sandbox images |
 | 2026-05-31 | Phase 1 complete: Prisma schema (11 tables), JWT auth, topics/questions REST, seed (8 topics, 40 questions), OpenAPI at `/api/docs` |
 | 2026-05-31 | P1-2 Docker Compose: PostgreSQL 15 + Redis at `infra/docker/`; npm `docker:*` scripts |

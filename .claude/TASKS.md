@@ -41,12 +41,12 @@
 
 | Task | Branch | Status |
 |------|--------|--------|
-| P3-1 · Progress & daily activity APIs | `feature/progress-api` | ❌ Pending |
-| P3-2 · Streak logic | `feature/streaks` | ❌ Pending |
-| P3-3 · Analytics aggregation | `feature/analytics-api` | ❌ Pending |
-| P3-4 · Dashboard UI (summary + charts) | `feature/dashboard-ui` | ❌ Pending |
-| P3-5 · Calendar + goals UI | `feature/goals-calendar` | ❌ Pending |
-| P3-6 · Badges (minimal) | `feature/badges` | ❌ Pending |
+| P3-1 · Progress & daily activity APIs | `feature/progress-api` | ✅ Completed |
+| P3-2 · Streak logic | `feature/streaks` | ✅ Completed |
+| P3-3 · Analytics aggregation | `feature/analytics-api` | ✅ Completed |
+| P3-4 · Dashboard UI (summary + charts) | `feature/dashboard-ui` | ✅ Completed |
+| P3-5 · Calendar + goals UI | `feature/goals-calendar` | ✅ Completed |
+| P3-6 · Badges (minimal) | `feature/badges` | ✅ Completed |
 
 ---
 

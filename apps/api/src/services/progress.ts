@@ -1,5 +1,6 @@
 import type { AttemptStatus } from '@dsa-studio/shared';
 import { prisma } from '../lib/prisma.js';
+import { updateDailyActivityOnAttempt } from './dailyActivity.js';
 
 export async function recordAttempt(
   userId: string,
@@ -68,29 +69,50 @@ export async function recordAttempt(
     },
   });
 
+  const wasSolved = existing?.status === 'solved' || existing?.status === 'mastered';
+  const isNewSolve = accepted && !wasSolved;
+
+  const topic = await prisma.topic.findUnique({
+    where: { topicId },
+    select: { topicName: true },
+  });
+
+  await updateDailyActivityOnAttempt(
+    userId,
+    topic?.topicName ?? null,
+    accepted,
+    isNewSolve,
+  );
+
   if (accepted) {
     await prisma.question.update({
       where: { questionId },
       data: { totalSolved: { increment: 1 }, totalAttempts: { increment: 1 } },
     });
 
-    const user = await prisma.user.findUnique({ where: { userId } });
-    if (user) {
-      const wasSolved = existing?.status === 'solved' || existing?.status === 'mastered';
-      if (!wasSolved) {
-        await prisma.user.update({
-          where: { userId },
-          data: {
-            totalQuestionsSolved: { increment: 1 },
-            lastActive: now,
-          },
-        });
-      }
+    if (isNewSolve) {
+      await prisma.user.update({
+        where: { userId },
+        data: {
+          totalQuestionsSolved: { increment: 1 },
+          lastActive: now,
+        },
+      });
+    } else {
+      await prisma.user.update({
+        where: { userId },
+        data: { lastActive: now },
+      });
     }
   } else {
     await prisma.question.update({
       where: { questionId },
       data: { totalAttempts: { increment: 1 } },
+    });
+
+    await prisma.user.update({
+      where: { userId },
+      data: { lastActive: now },
     });
   }
 }
