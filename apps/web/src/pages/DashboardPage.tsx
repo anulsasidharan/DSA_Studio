@@ -1,11 +1,14 @@
 import type { ComponentType } from 'react';
+import { Link } from 'react-router-dom';
 import { Flame, Target, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useHealthCheck } from '@/hooks/useHealthCheck';
 import { useAppStore } from '@/store/appStore';
+import { useAuthStore } from '@/store/authStore';
 
 export function DashboardPage() {
   const { dailyGoal, questionsSolvedToday } = useAppStore();
+  const user = useAuthStore((s) => s.user);
   const { data: health, loading, error } = useHealthCheck();
 
   return (
@@ -13,9 +16,9 @@ export function DashboardPage() {
       <section className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">Welcome to DSA Studio</h1>
         <p className="max-w-2xl text-muted-foreground">
-          Master data structures and algorithms with structured paths, daily tracking,
-          and AI-powered assistance. Phase 1 scaffold is ready — learning features arrive
-          in upcoming tasks.
+          Master data structures and algorithms with structured paths, theory content,
+          Monaco-powered practice, and submission grading.
+          {user ? ` Welcome back, ${user.username}.` : ' Sign in to save progress.'}
         </p>
       </section>
 
@@ -29,7 +32,7 @@ export function DashboardPage() {
         <StatCard
           icon={Trophy}
           label="Questions solved"
-          value="0"
+          value={String(user?.totalQuestionsSolved ?? 0)}
           hint="Across all topics"
         />
         <StatCard
@@ -72,8 +75,12 @@ export function DashboardPage() {
       </section>
 
       <section className="flex flex-wrap gap-3">
-        <Button>Browse topics (Phase 2)</Button>
-        <Button variant="outline">View progress (Phase 3)</Button>
+        <Button asChild>
+          <Link to="/learn">Browse topics</Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link to="/practice">Start practicing</Link>
+        </Button>
       </section>
     </div>
   );

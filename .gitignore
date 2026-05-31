@@ -42,3 +42,7 @@ infra/docker/.env
 # Misc
 *.local
 .cache/
+
+# Code sandbox ephemeral workspaces (local runner)
+dsa-sandbox-*/
+dsa-docker-*/

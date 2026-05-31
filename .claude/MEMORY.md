@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Phase 1 **complete** — monorepo, Docker, Prisma schema, JWT auth, topics/questions APIs, seed data, OpenAPI docs
+**Repository state:** Phase 2 **complete** — Learning Hub UI, Monaco, code sandbox, submit/run, hints, solutions
 
 ---
 
@@ -80,13 +80,21 @@
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
 | 1 | Foundation | **Complete** | All P1-* tasks done; ready for Phase 2 Learning Hub |
-| 2 | Learning Hub | Not started | Topics, questions, Monaco practice |
+| 2 | Learning Hub | **Complete** | Topic browser, theory, practice UI, Monaco, sandbox, submit, hints, solutions |
 | 3 | Progress Tracking | Not started | Analytics, streaks, goals |
 | 4 | Advanced Features | Not started | Revision queue, custom import |
 | 5 | AI Integration | Not started | Chatbot, hints, classification |
 | 6 | Polish & Launch | Not started | Tests, CI/CD, production deploy |
 
-**Active focus:** Phase 2 — Learning Hub (see `TASKS.md` P2-*)
+**Active focus:** Phase 3 — Progress Tracking (see `TASKS.md` P3-*)
+
+### Product policies (Phase 2)
+
+| Policy | Decision |
+|--------|----------|
+| Solutions visibility | After first attempt (`attempted`, `solved`, or `mastered`) |
+| Code execution | Local Python/Node by default; set `SANDBOX_USE_DOCKER=true` for Docker images in `infra/docker/sandbox/` |
+| Starter code | Per-question templates in `packages/shared/src/code-templates.ts`; generic fallback for unmapped slugs |
 
 ---
 
@@ -115,6 +123,7 @@
 
 | Date | Change |
 |------|--------|
+| 2026-05-31 | Phase 2 complete: Learn/Practice UI, Monaco, POST /api/run & /api/submit, hints, solutions (gated), Docker sandbox images |
 | 2026-05-31 | Phase 1 complete: Prisma schema (11 tables), JWT auth, topics/questions REST, seed (8 topics, 40 questions), OpenAPI at `/api/docs` |
 | 2026-05-31 | P1-2 Docker Compose: PostgreSQL 15 + Redis at `infra/docker/`; npm `docker:*` scripts |
 | 2026-05-31 | P1-1 monorepo scaffold: npm workspaces, Vite web, Express API, shared types |

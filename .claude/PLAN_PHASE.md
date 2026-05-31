@@ -39,21 +39,21 @@ Phased delivery from **`.claude/rules/CLAUDE.md` § Implementation Roadmap** (6 
 
 ### Weeks 5–6: Topic & question UI
 
-- [ ] Topic grid/list with filters (category, difficulty, progress)
-- [ ] Topic detail: theory tab, practice list by difficulty
-- [ ] Question detail: statement, constraints, examples
-- [ ] Monaco integration + language selector
+- [x] Topic grid/list with filters (category, difficulty, progress)
+- [x] Topic detail: theory tab, practice list by difficulty
+- [x] Question detail: statement, constraints, examples
+- [x] Monaco integration + language selector
 
 **Exit:** User navigates topic → question without errors.
 
 ### Weeks 7–8: Practice & submission
 
-- [ ] Docker-based code execution service
-- [ ] Run against sample test cases (client or API)
-- [ ] `POST /api/submit` — hidden tests, status, timing
-- [ ] `user_attempts` + `user_progress` updates
-- [ ] Solutions tab (post-attempt or always — document policy in MEMORY)
-- [ ] Progressive hints endpoint `GET /api/questions/:id/hints`
+- [x] Docker-based code execution service
+- [x] Run against sample test cases (client or API)
+- [x] `POST /api/submit` — hidden tests, status, timing
+- [x] `user_attempts` + `user_progress` updates
+- [x] Solutions tab (post-attempt or always — document policy in MEMORY)
+- [x] Progressive hints endpoint `GET /api/questions/:id/hints`
 
 **Exit:** Submit correct solution → `accepted` + progress `solved`.
 

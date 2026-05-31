@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: DSA Studio API
-  description: REST API for the DSA Studio learning platform — Phase 1 Foundation endpoints.
-  version: 0.1.0
+  description: REST API for the DSA Studio learning platform — Phase 1 Foundation + Phase 2 Learning Hub.
+  version: 0.2.0
   contact:
     name: DSA Studio Team
 
@@ -15,6 +15,7 @@ tags:
   - name: Auth
   - name: Topics
   - name: Questions
+  - name: Practice
 
 components:
   securitySchemes:
@@ -458,3 +459,145 @@ paths:
           description: Question detail
         '404':
           description: Question not found
+
+  /run:
+    post:
+      tags: [Practice]
+      summary: Run code against sample test cases
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [questionId, language, code]
+              properties:
+                questionId:
+                  type: string
+                  format: uuid
+                language:
+                  type: string
+                  enum: [python, javascript, typescript]
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Sample test run results
+
+  /submit:
+    post:
+      tags: [Practice]
+      summary: Submit code for full grading (all test cases)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [questionId, language, code]
+              properties:
+                questionId:
+                  type: string
+                  format: uuid
+                language:
+                  type: string
+                  enum: [python, javascript, typescript]
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Submission result with status and timing
+
+  /questions/{id}/hints:
+    get:
+      tags: [Questions]
+      summary: Get progressive hints up to tier N
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: tier
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Revealed hints
+
+  /questions/{id}/solutions:
+    get:
+      tags: [Questions]
+      summary: Get solutions (after first attempt)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Solution list
+        '403':
+          description: Solutions locked until first attempt
+
+  /questions/{id}/starter:
+    get:
+      tags: [Questions]
+      summary: Get starter code template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: language
+          in: query
+          schema:
+            type: string
+            enum: [python, javascript, typescript]
+            default: python
+      responses:
+        '200':
+          description: Starter code
+
+  /questions/slug/{slug}:
+    get:
+      tags: [Questions]
+      summary: Get question by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question detail
+
+  /topics/slug/{slug}:
+    get:
+      tags: [Topics]
+      summary: Get topic by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Topic detail

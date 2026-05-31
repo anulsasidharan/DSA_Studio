@@ -20,6 +20,7 @@
     "docker:down": "docker compose -f infra/docker/docker-compose.yml down",
     "docker:logs": "docker compose -f infra/docker/docker-compose.yml logs -f",
     "docker:ps": "docker compose -f infra/docker/docker-compose.yml ps",
+    "sandbox:build": "docker build -f infra/docker/sandbox/Dockerfile.python -t dsa-sandbox-python:latest . && docker build -f infra/docker/sandbox/Dockerfile.node -t dsa-sandbox-node:latest .",
     "db:generate": "npm run db:generate -w @dsa-studio/api",
     "db:migrate": "npm run db:migrate -w @dsa-studio/api",
     "db:seed": "npm run db:seed -w @dsa-studio/api",
