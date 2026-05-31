@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-05-31  
 **Specification version:** `rules/CLAUDE.md` v1.0  
-**Repository state:** Phase 1 in progress — **P1-1 monorepo scaffold complete**, **P1-2 Docker Compose (PostgreSQL, Redis) complete**
+**Repository state:** Phase 1 **complete** — monorepo, Docker, Prisma schema, JWT auth, topics/questions APIs, seed data, OpenAPI docs
 
 ---
 
@@ -30,7 +30,7 @@
 | Code editor | Monaco Editor | VS Code–parity in browser |
 | Charts | Recharts or Chart.js | Analytics dashboard |
 | Backend runtime | Node.js 20+ with Express | Spec default |
-| ORM | Prisma or TypeORM | Spec allows either; prefer Prisma unless team standard differs |
+| ORM | **Prisma 6** | Locked at P1-3 — full 11-table schema + migrations |
 | Primary DB | PostgreSQL 15+ | Relational model for users, questions, progress |
 | Cache | Redis | Sessions, leaderboards, hot question lists |
 | AI provider | OpenAI GPT-4 **or** Claude API | Chatbot, hints, import classification |
@@ -79,14 +79,14 @@
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** | P1-1 monorepo done; P1-2 Docker done; Prisma, auth next |
+| 1 | Foundation | **Complete** | All P1-* tasks done; ready for Phase 2 Learning Hub |
 | 2 | Learning Hub | Not started | Topics, questions, Monaco practice |
 | 3 | Progress Tracking | Not started | Analytics, streaks, goals |
 | 4 | Advanced Features | Not started | Revision queue, custom import |
 | 5 | AI Integration | Not started | Chatbot, hints, classification |
 | 6 | Polish & Launch | Not started | Tests, CI/CD, production deploy |
 
-**Active focus:** Phase 1 — project scaffold and authentication (see `TASKS.md` P1-*)
+**Active focus:** Phase 2 — Learning Hub (see `TASKS.md` P2-*)
 
 ---
 
@@ -95,7 +95,7 @@
 | ID | Item | Status |
 |----|------|--------|
 | OQ-1 | Monorepo vs separate `frontend/` + `backend/` repos | **Resolved P1-1** — npm workspaces: `apps/web` + `apps/api` + `packages/shared` |
-| OQ-2 | Prisma vs TypeORM | **Decide at P1-3** — default Prisma in MEMORY until changed |
+| OQ-2 | Prisma vs TypeORM | **Resolved P1-3** — Prisma 6 with full schema |
 | OQ-3 | Zustand vs Redux Toolkit | **Resolved P1-1** — Zustand for MVP |
 | OQ-4 | Next.js vs Vite SPA | **Resolved P1-1** — Vite SPA + React 19 |
 
@@ -115,6 +115,7 @@
 
 | Date | Change |
 |------|--------|
+| 2026-05-31 | Phase 1 complete: Prisma schema (11 tables), JWT auth, topics/questions REST, seed (8 topics, 40 questions), OpenAPI at `/api/docs` |
 | 2026-05-31 | P1-2 Docker Compose: PostgreSQL 15 + Redis at `infra/docker/`; npm `docker:*` scripts |
 | 2026-05-31 | P1-1 monorepo scaffold: npm workspaces, Vite web, Express API, shared types |
 | 2026-05-31 | Initial MEMORY from `rules/CLAUDE.md`; all phases pending |

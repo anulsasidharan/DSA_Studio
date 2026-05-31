@@ -10,7 +10,11 @@ const corsOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:5173';
 
 const app = express();
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 app.use(
   cors({
     origin: corsOrigin.split(',').map((origin) => origin.trim()),
@@ -22,7 +26,7 @@ app.use(express.json({ limit: '1mb' }));
 app.get('/', (_req, res) => {
   res.json({
     name: 'DSA Studio API',
-    docs: '/api/health',
+    docs: '/api/docs',
   });
 });
 
